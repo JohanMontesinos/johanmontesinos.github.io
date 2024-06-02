@@ -65,11 +65,12 @@
 @media (min-width: 900px) {
     .profile-container {
         grid-template-rows: [bg-start text-start] 1fr [text-end bg-end];
+        grid-template-columns: [bg-start text-start] 1fr [bg-end text-end];
     }
     .profile-container  .profile {
         background-color:#222;
         color: #ffffff;
-        width: 80%;
+        width: 100%;
         padding: 300px;
         padding-top: 80px;
         padding-right: 60px;
@@ -79,6 +80,37 @@
     .profile-container  .profile a {
         color: #FFF;
         font-weight: bold;
+    }
+    .profile-container .profile-background {
+        background: #ffffff no-repeat 40% 10%;
+        background-size: cover;
+        width: 100%;
+    }
+}
+
+
+@media (max-width: 900px) {
+    .profile-container {
+        grid-template-columns: [bg-start text-start] 1fr [text-end bg-end];
+        grid-template-rows: [bg-start] auto 1fr [bg-end text-start] auto [text-end];
+    }
+    .profile-container  .profile {
+        background-color:#222;
+        color: #DDD;
+        width: 100%;
+        padding: 40px;
+        margin: 0px;
+        border-radius: 0px;
+    }
+    .profile-container  .profile a {
+        color: #FFF;
+        font-weight: bold;
+    }
+    .profile-container .profile-background {
+        background: #ffffff no-repeat 40% 10%;
+        background-size: cover;
+        width: 100%;
+        min-height: 90vw;
     }
 }
 
