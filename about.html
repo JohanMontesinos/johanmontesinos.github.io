@@ -63,6 +63,9 @@
 
 
 @media (min-width: 900px) {
+    .profile-container {
+        grid-template-rows: [bg-start text-start] 1fr [text-end bg-end];
+    }
     .profile-container  .profile {
         background-color:#222;
         color: #ffffff;
@@ -72,6 +75,10 @@
         padding-right: 60px;
         margin: 0px;
         border-radius: 0px;
+    }
+    .profile-container  .profile a {
+        color: #FFF;
+        font-weight: bold;
     }
 }
 
