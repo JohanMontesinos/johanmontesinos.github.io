@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About - LaTeX Blog</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- FontAwesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
+    <!-- Custom CSS Files -->
+    <link href="sticky-footer-navbar.css" rel="stylesheet">
+    <link href="cmun-serif.css" rel="stylesheet">
+    <link href="cmun-serif-slanted.css" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Computer Modern Serif', 'CMU Serif', Georgia, serif;
+            background-color: #fefefe;
+            color: #2d2d2d;
+            line-height: 1.8;
+            font-size: 1.1rem;
+        }
+
+        .navbar {
+            background-color: #fff;
+            border-bottom: 1px solid #ddd;
+            padding: 1rem 0;
+        }
+
+        .navbar-brand {
+            font-size: 1.5rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        main {
+            padding-top: 6rem;
+            padding-bottom: 4rem;
+        }
+
+        .about-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 3rem;
+            border: 1px solid #e0e0e0;
+        }
+
+        .about-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 2px solid #ddd;
+        }
+
+        .about-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            letter-spacing: 0.5px;
+        }
+
+        .about-subtitle {
+            font-size: 1.3rem;
+            font-style: italic;
+            color: #555;
+            line-height: 1.6;
+        }
+
+        .about-content {
+            text-align: justify;
+            hyphens: auto;
+        }
+
+        .about-content p {
+            margin-bottom: 1.5rem;
+            text-indent: 1.5em;
+        }
+
+        .about-content p:first-of-type {
+            text-indent: 0;
+        }
+
+        .about-content p:first-of-type::first-letter {
+            font-size: 3.5rem;
+            font-weight: 700;
+            float: left;
+            line-height: 0.9;
+            margin-right: 0.1em;
+            margin-top: 0.1em;
+        }
+
+        .about-content h2 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-top: 2.5rem;
+            margin-bottom: 1.5rem;
+            letter-spacing: 0.3px;
+        }
+
+        .mission-box {
+            background-color: #f9f9f9;
+            border-left: 4px solid #0056b3;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+
+        .mission-box h3 {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .mission-box p {
+            text-indent: 0;
+            margin-bottom: 0;
+        }
+
+        .values-list {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .values-list li {
+            padding: 1rem 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .values-list li:last-child {
+            border-bottom: none;
+        }
+
+        .values-list i {
+            color: #0056b3;
+            margin-right: 1rem;
+            font-size: 1.3rem;
+        }
+
+        .values-list strong {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .footer {
+            background-color: #f8f9fa;
+            border-top: 1px solid #ddd;
+            padding: 2rem 0;
+            text-align: center;
+            color: #666;
+        }
+
+        @media (max-width: 768px) {
+            .about-container {
+                padding: 2rem 1.5rem;
+            }
+
+            .about-title {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+
+<body class="d-flex flex-column min-vh-100">
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg fixed-top navbar-light">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <i class="fas fa-feather-alt"></i> JoHaN's Blog
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="about.html">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="archive.html">Archive</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="contact.html">Contact</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="flex-fill">
+        <div class="about-container">
+            <!-- Page Header -->
+            <header class="about-header">
+                <h1 class="about-title">Johan Montesinos Blog</h1>
+                <p class="about-subtitle">
+                    Where ideas in mathematics, physics and computer science meets typography in the pursuit of clear
+                    communication.
+                </p>
+            </header>
+
+            <!-- About Content -->
+            <div class="about-content">
+
+                <p>I am an <strong>Electrical Engineer</strong> and <strong>Project Manager</strong> driven by a
+                    singular belief: that <strong>technology is the deliberate crystallization of human intent into
+                        functional form.</strong>. My work sits
+                    at the intersection of hardware, software, and strategic execution, but my true fascination lies
+                    in utilizing <strong>innovation as an existential tool for improving people's lives</strong>.
+                </p>
+                <p>
+                    This blog represents a confluence of all my passions: the elegance of mathematical, phycis, computer
+                    science thought and the
+                    precision of typographical design. Inspired by the LaTeX typesetting system, which has been the gold
+                    standard for academic publishing since the 1980s, I strive to present complex ideas with clarity
+                    and aesthetic refinement.
+                </p>
+
+                <h2>Our Mission</h2>
+
+                <div class="mission-box">
+                    <h3><i class="fas fa-bullseye"></i> Purpose</h3>
+                    <p>
+                        To make mathematics, phycis, computer science, and technical subjects accessible through clear
+                        writing
+                        and beautiful typography. I believe that good design is not merely decorative—it serves
+                        comprehension, helping readers navigate complex ideas with confidence.
+                    </p>
+                </div>
+
+                <p>
+                    Every article published here undergoes careful consideration of both content and form. I write with
+                    the conviction that technical subjects deserve the same attention to prose style as any literary
+                    work. Mathematical notation receives proper spacing and sizing. Paragraphs flow with deliberate
+                    rhythm. Headers provide clear signposts through conceptual terrain.
+                </p>
+
+                <h2>Core Values</h2>
+
+                <ul class="values-list">
+                    <li>
+                        <i class="fas fa-balance-scale"></i>
+                        <strong>Rigor and Accessibility</strong><br>
+                        Maintain mathematical precision while explaining concepts in language accessible to dedicated
+                        learners at various levels.
+                    </li>
+                    <li>
+                        <i class="fas fa-palette"></i>
+                        <strong>Aesthetic Excellence</strong><br>
+                        Typography matters. I employ principles from centuries of print tradition to create documents
+                        that are pleasant to read on screen.
+                    </li>
+                    <li>
+                        <i class="fas fa-graduation-cap"></i>
+                        <strong>Pedagogical Clarity</strong><br>
+                        Every article aims to teach, building understanding through careful exposition, concrete
+                        examples, and thoughtful progression of ideas.
+                    </li>
+                    <li>
+                        <i class="fas fa-book-open"></i>
+                        <strong>Intellectual Honesty</strong><br>
+                        I acknowledge limitations, cite sources properly, and distinguish between established results
+                        and speculative ideas.
+                    </li>
+                </ul>
+
+                <h2>Who I Write For</h2>
+
+                <p>
+                    My audience includes students deepening their understanding of technical subjects, professionals
+                    seeking clear explanations of adjacent fields, and curious minds who appreciate the beauty inherent
+                    in mathematical structures. Whether you're encountering these topics for the first time or reviewing
+                    familiar material from new perspectives, I hope to offer value through careful exposition.
+                </p>
+
+                <p>
+                    I assume readers bring intellectual curiosity and willingness to engage with challenging ideas. We
+                    do not assume extensive prerequisites—necessary background is explained or referenced. Our goal is
+                    not to impress with obscurity but to illuminate with clarity.
+                </p>
+
+                <h2>The LaTeX Influence</h2>
+
+                <p>
+                    Donald Knuth created TeX in the late 1970s because he found existing typesetting systems inadequate
+                    for his mathematical texts. Leslie Lamport later developed LaTeX as a more accessible interface to
+                    TeX's power. These tools transformed academic publishing by giving authors control over
+                    typographical quality previously available only to professional typesetters.
+                </p>
+
+                <p>
+                    This blog embraces LaTeX's philosophy: content and presentation both matter. I use Computer Modern
+                    fonts, designed by Knuth specifically for mathematical typesetting. We employ careful spacing,
+                    proper paragraph indentation, and thoughtful use of whitespace. These choices reflect our belief
+                    that how ideas are presented influences how they are understood.
+                </p>
+
+                <h2>Looking Forward</h2>
+
+                <p>
+                    This project continues to evolve. I welcome dialogue with readers, suggestions for topics, and
+                    constructive feedback on both content and presentation. Mathematics and typography are both living
+                    disciplines, and we aim to grow alongside them while maintaining the timeless principles that make
+                    technical communication effective.
+                </p>
+
+                <p>
+                    Thank you for reading. I hope you find something here that sparks insight, satisfies curiosity, or
+                    simply provides a moment of appreciation for the elegant structures underlying our technical
+                    disciplines.
+                </p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <p class="mb-0">&copy; 2024 JoHaN's Blog. All rights reserved.</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <a href="https://github.com/JohanMontesinos/" class="text-decoration-none me-3"><i
+                            class="fab fa-github"></i> GitHub</a>
+                    <a href="https://x.com/johanmontesinos" class="text-decoration-none me-3"><i
+                            class="fab fa-twitter"></i> X</a>
+                    <a href="mailto:johan.montesinos@outlook.com" class="text-decoration-none"><i
+                            class="fas fa-envelope"></i>
+                        Email</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

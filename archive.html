@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Archive - LaTeX Blog</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- FontAwesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    
+    <!-- Custom CSS Files -->
+    <link href="sticky-footer-navbar.css" rel="stylesheet">
+    <link href="cmun-serif.css" rel="stylesheet">
+    <link href="cmun-serif-slanted.css" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Computer Modern Serif', 'CMU Serif', Georgia, serif;
+            background-color: #fefefe;
+            color: #2d2d2d;
+            line-height: 1.6;
+        }
+        
+        .navbar {
+            background-color: #fff;
+            border-bottom: 1px solid #ddd;
+            padding: 1rem 0;
+        }
+        
+        .navbar-brand {
+            font-size: 1.5rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+        
+        main {
+            padding-top: 2rem;
+            padding-bottom: 4rem;
+        }
+        
+        .archive-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 2rem 0;
+        }
+        
+        .archive-header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            letter-spacing: 1px;
+        }
+        
+        .archive-header p {
+            font-style: italic;
+            color: #666;
+            font-size: 1.1rem;
+        }
+        
+        .archive-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .year-section {
+            margin-bottom: 3rem;
+        }
+        
+        .year-header {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #0056b3;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 3px solid #0056b3;
+        }
+        
+        .month-section {
+            margin-bottom: 2rem;
+            margin-left: 1rem;
+        }
+        
+        .month-header {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #555;
+            margin-bottom: 1rem;
+        }
+        
+        .post-list {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .post-item {
+            padding: 1rem;
+            margin-bottom: 0.75rem;
+            background: #fff;
+            border: 1px solid #e0e0e0;
+            transition: all 0.3s ease;
+        }
+        
+        .post-item:hover {
+            border-color: #0056b3;
+            box-shadow: 0 2px 8px rgba(0, 86, 179, 0.1);
+        }
+        
+        .post-item-date {
+            font-size: 0.9rem;
+            color: #888;
+            margin-bottom: 0.5rem;
+        }
+        
+        .post-item-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .post-item-title a {
+            color: #2d2d2d;
+            text-decoration: none;
+        }
+        
+        .post-item-title a:hover {
+            color: #0056b3;
+        }
+        
+        .post-item-excerpt {
+            font-size: 0.95rem;
+            color: #555;
+            font-style: italic;
+            margin-bottom: 0.5rem;
+        }
+        
+        .post-item-meta {
+            font-size: 0.85rem;
+            color: #999;
+        }
+        
+        .post-item-meta i {
+            margin-right: 0.3rem;
+        }
+        
+        .category-badge {
+            display: inline-block;
+            background-color: #f0f0f0;
+            color: #555;
+            padding: 0.2rem 0.6rem;
+            font-size: 0.8rem;
+            border-radius: 3px;
+            margin-right: 0.5rem;
+        }
+        
+        .search-box {
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: #f9f9f9;
+            border: 1px solid #e0e0e0;
+        }
+        
+        .search-box input {
+            font-family: 'Computer Modern Serif', 'CMU Serif', Georgia, serif;
+            font-size: 1rem;
+        }
+        
+        .stats-box {
+            background-color: #f9f9f9;
+            border-left: 4px solid #0056b3;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stats-box h3 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #0056b3;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        .footer {
+            background-color: #f8f9fa;
+            border-top: 1px solid #ddd;
+            padding: 2rem 0;
+            text-align: center;
+            color: #666;
+        }
+        
+        @media (max-width: 768px) {
+            .archive-header h1 {
+                font-size: 2rem;
+            }
+            
+            .month-section {
+                margin-left: 0;
+            }
+        }
+    </style>
+</head>
+<body class="d-flex flex-column min-vh-100">
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <i class="fas fa-feather-alt"></i> LaTeX Blog
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="about.html">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="archive.html">Archive</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="contact.html">Contact</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="flex-fill">
+        <div class="container">
+            <!-- Archive Header -->
+            <div class="archive-header">
+                <h1>Article Archive</h1>
+                <p>A complete collection of all published articles</p>
+            </div>
+
+            <div class="archive-container">
+                <!-- Search Box -->
+                <div class="search-box">
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fas fa-search"></i></span>
+                        <input type="text" class="form-control" placeholder="Search articles by title, topic, or keyword...">
+                    </div>
+                </div>
+
+                <!-- Statistics -->
+                <div class="stats-box">
+                    <h3><i class="fas fa-chart-bar"></i> Archive Statistics</h3>
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <div class="stat-number">24</div>
+                            <div class="stat-label">Total Articles</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">6</div>
+                            <div class="stat-label">Categories</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">2</div>
+                            <div class="stat-label">Years</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2025 Posts -->
+                <div class="year-section">
+                    <h2 class="year-header">2025</h2>
+
+                    <!-- November 2025 -->
+                    <div class="month-section">
+                        <h3 class="month-header"><i class="far fa-calendar"></i> November</h3>
+                        <ul class="post-list">
+                            <li class="post-item">
+                                <div class="post-item-date">November 28, 2025</div>
+                                <h4 class="post-item-title">
+                                    <a href="post.html">The Beauty of Euler's Identity</a>
+                                </h4>
+                                <p class="post-item-excerpt">A deep dive into one of the most elegant equations in mathematics</p>
+                                <div class="post-item-meta">
+                                    <span class="category-badge">Mathematics</span>
+                                    <i class="far fa-clock"></i> 8 min read
+                                </div>
+                            </li>
+
+                            <li class="post-item">
+                                <div class="post-item-date">November 25, 2025</div>
+                                <h4 class="post-item-title">
+                                    <a href="post.html">Typography in Academic Writing</a>
+                                </h4>
+                                <p class="post-item-excerpt">Why LaTeX remains the gold standard for scientific documents</p>
+                                <div class="post-item-meta">
+                                    <span class="category-badge">Typography</span>
+                                    <i class="far fa-clock"></i> 6 min read
+                                </div>
+                            </li>
+
+                            <li class="post-item">
+                                <div class="post-item-date">November 22, 2025</div>
+                                <h4 class="post-item-title">
+                                    <a href="post.html">Understanding Asymptotic Analysis</a>
+                                </h4>
+                                <p class="post-item-excerpt">Big O notation and why it matters in algorithm design</p>
+                                <div class="post-item-meta">
+                                    <span class="category-badge">Computer Science</span>
+                                    <i class="far fa-clock"></i> 10 min read
+                                </div>
+                            </li>
+
+                            <li class="post-item">
+                                <div class="post-item-date">November 18, 2025</div>
+                                <h4 class="post-item-title">
+                                    <a href="post.html">Mathematical Platonism</a>
+                                </h4>
+                                <p class="post-item-excerpt">Do mathematical objects exist independently of human thought?</p>
+                                <div class="post-item-meta">
+                                    <span class="category-badge">Philosophy</span>
+                                    <i class="far fa-clock"></i> 12 min read
+                                </div>
+                            </li>
+
+                            <li class="post-item">
+                                <div class="post-item-date">November 15, 2025</div>
+                                <h4 class="post-item-title">
+                                    <a href="post.html">Visualizing Complex Data</a>
+                                </h4>
+                                <p class="post-item-excerpt">Techniques for presenting multidimensional information clearly</p>
+                                <div class="post-item-meta">
+                                    <span class="category-badge">Data Science</span>
+                                    <i class="far fa-clock"></i> 7 min read
+                                </div>
+                            </li>
+
+                            <li class="post-item">
+                                <div class="post-item-date">November 12, 2025</div>
+                                <h4 class="post-item-title">
+                                    <a href="post.html">The Art of Technical Writing</a>
+                                </h4>
+                                <p class="post-item-excerpt">Clarity, precision, and elegance in communicating complex ideas</p>
+                                <div class="post-item-meta">
+                                    <span class="category-badge">Writing</span>
+                                    <i class="far fa-clock"></i> 9 min read
+                                </div>
+                            </li>
+
+                            <li class="post-item">
+                                <div class="post-item-date">November 8, 2025</div>
+                                <h4 class="post-item-title">
+                                    <a href="post.html">Proof Techniques in Number Theory</a>
+                                </h4>
+                                <p class="post-item-excerpt">Essential methods for proving theorems about integers</p>
+                                <div class="post-item-meta">
+                                    <span class="category-badge">Mathematics</span>
+                                    <i class="far fa-clock"></i> 11 min read
+                                </div>
+                            </li>
+
+                            <li class="post-item">
+                                <div class="post-item-date">November 4, 2025</div>
+                                <h4 class="post-item-title">
+                                    <a href="post.html">Functional Programming Paradigms</a>
+                                </h4>
+                                <p class="post-item-excerpt">Understanding immutability, pure functions, and higher-order abstractions</p>
+                                <div class="post-item-meta">
+                                    <span class="category-badge">Computer Science</span>
+                                    <i class="far fa-clock"></i> 13 min read
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- October 2025 -->
+                    <div class="month-section">
+                        <h3 class="month-header"><i class="far fa-calendar"></i> October</h3>
+                        <ul class="post-list">
+                            <li class="post-item">
+                                <div class="post-item-date">October 29, 2025</div>
+                                <h4 class="post-item-title">
+                                    <a href="post.html">The Riemann Hypothesis</a>
+                                </h4>
+                                <p class="post-item-excerpt">Exploring one of mathematics' greatest unsolved mysteries</p>
+                                <div class="post-item-meta">
+                                    <span class="category-badge">Mathematics</span>
+                                    <i class="far fa-clock"></i> 15 min read
+                                </div>
+                            </li>
+
+                            <li class="post-item">
+                                <div class="post-item-date">October 22, 2025</div>
+                                <h4 class="post-item-title">
+                                    <a href="post.html">Machine Learning Foundations</a>
+                                </h4>
+                                <p class="post-item-excerpt">The mathematical principles underlying modern AI systems</p>
+                                <div class="post-item-meta">
+                                    <span class="category-badge">Data Science</span>
+                                    <i class="far fa-clock"></i> 14 min read
+                                </div>
+                            </li>
+
+                            <li class="post-item">
+                                <div class="post-item-date">October 15, 2025</div>
+                                <h4 class="post-item-title">
+                                    <a href="post.html">Graph Theory Applications</a>
+                                </h4>
+                                <p class="post-item-excerpt">From social networks to routing algorithms</p>
+                                <div class="post-item-meta">
+                                    <span class="category-badge">Mathematics</span>
+                                    <i class="far fa-clock"></i> 10 min read
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- 2024 Posts -->
+                <div class="year-section">
+                    <h2 class="year-header">2024</h2>
+
+                    <!-- December 2024 -->
+                    <div class="month-section">
+                        <h3 class="month-header"><i class="far fa-calendar"></i> December</h3>
+                        <ul class="post-list">
+                            <li class="post-item">
+                                <div class="post-item-date">December 20, 2024</div>
+                                <h4 class="post-item-title">
+                                    <a href="post.html">Quantum Computing Basics</a>
+                                </h4>
+                                <p class="post-item-excerpt">Understanding qubits, superposition, and entanglement</p>
+                                <div class="post-item-meta">
+                                    <span class="category-badge">Computer Science</span>
+                                    <i class="far fa-clock"></i> 16 min read
+                                </div>
+                            </li>
+
+                            <li class="post-item">
+                                <div class="post-item-date">December 12, 2024</div>
+                                <h4 class="post-item-title">
+                                    <a href="post.html">Statistical Inference Methods</a>
+                                </h4>
+                                <p class="post-item-excerpt">From hypothesis testing to confidence intervals</p>
+                                <div class="post-item-meta">
+                                    <span class="category-badge">Statistics</span>
+                                    <i class="far fa-clock"></i> 12 min read
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer mt-auto">
+        <div class="container">
+            <p>&copy; 2025 LaTeX Blog. All rights reserved.</p>
+            <p>
+                <a href="#" class="text-decoration-none me-3"><i class="fab fa-twitter"></i></a>
+                <a href="#" class="text-decoration-none me-3"><i class="fab fa-github"></i></a>
+                <a href="#" class="text-decoration-none"><i class="fas fa-envelope"></i></a>
+            </p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
