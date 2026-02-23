@@ -1,0 +1,961 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Building a Home DevOps Lab on Commodity Hardware - JoHaN's Blog</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- FontAwesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
+    <style>
+        /* =====================================================================
+        BASE STYLES
+        ===================================================================== */
+        body {
+            font-family: 'Georgia', serif;
+            background-color: #fefefe;
+            color: #2d2d2d;
+            line-height: 1.8;
+            font-size: 1.1rem;
+        }
+
+        .navbar {
+            background-color: #fff;
+            border-bottom: 1px solid #ddd;
+            padding: 1rem 0;
+        }
+
+        .navbar-brand {
+            font-size: 1.5rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        main {
+            padding-top: 6rem;
+            padding-bottom: 4rem;
+        }
+
+        /* =====================================================================
+        POST LAYOUT
+        ===================================================================== */
+        .post-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 4rem;
+            border: 1px solid #e0e0e0;
+        }
+
+        .post-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 2px solid #ddd;
+        }
+
+        .post-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            line-height: 1.3;
+            letter-spacing: 0.5px;
+        }
+
+        .post-date {
+            font-size: 0.95rem;
+            color: #888;
+            margin-bottom: 1rem;
+            font-style: italic;
+        }
+
+        .post-date i { margin-right: 0.5rem; }
+
+        .post-subtitle {
+            font-size: 1.3rem;
+            font-style: italic;
+            color: #555;
+            line-height: 1.6;
+            margin-top: 1.5rem;
+        }
+
+        /* =====================================================================
+        POST BODY
+        ===================================================================== */
+        .post-body { text-align: justify; hyphens: auto; }
+
+        .post-body h2 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-top: 2.5rem;
+            margin-bottom: 1.5rem;
+            letter-spacing: 0.3px;
+        }
+
+        .post-body h3 {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            font-style: italic;
+        }
+
+        .post-body p {
+            margin-bottom: 1.5rem;
+            text-indent: 1.5em;
+        }
+
+        .post-body p:first-of-type { text-indent: 0; }
+
+        .post-body p:first-of-type::first-letter {
+            font-size: 3.5rem;
+            font-weight: 700;
+            float: left;
+            line-height: 0.9;
+            margin-right: 0.1em;
+            margin-top: 0.1em;
+        }
+
+        .post-body em { font-style: italic; }
+        .post-body strong { font-weight: 600; }
+
+        .post-body a {
+            color: #0056b3;
+            text-decoration: none;
+            border-bottom: 1px solid transparent;
+            transition: border-bottom 0.2s;
+        }
+
+        .post-body a:hover { border-bottom: 1px solid #0056b3; }
+
+        .post-body ul, .post-body ol {
+            margin-bottom: 1.5rem;
+            padding-left: 2rem;
+        }
+
+        .post-body li { margin-bottom: 0.75rem; }
+
+        /* =====================================================================
+        BLOCKQUOTE
+        ===================================================================== */
+        .post-body blockquote {
+            margin: 2rem 0;
+            padding: 1rem 2rem;
+            border-left: 4px solid #ddd;
+            background-color: #f9f9f9;
+            font-style: italic;
+            color: #555;
+        }
+
+        .post-body blockquote cite {
+            display: block;
+            margin-top: 0.75rem;
+            font-size: 0.9rem;
+            font-style: normal;
+            color: #888;
+        }
+
+        /* =====================================================================
+        CODE
+        ===================================================================== */
+        .post-body code {
+            font-family: 'Courier New', monospace;
+            background-color: #f5f5f5;
+            padding: 0.2rem 0.4rem;
+            border-radius: 3px;
+            font-size: 0.9em;
+        }
+
+        .post-body pre {
+            background-color: #f5f5f5;
+            padding: 1.5rem;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 2rem 0;
+            border: 1px solid #e8e8e8;
+            font-size: 0.88rem;
+            line-height: 1.6;
+        }
+
+        .post-body pre code { background: none; padding: 0; }
+
+        .code-wrapper { position: relative; margin: 2rem 0; }
+
+        .code-wrapper .code-lang {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.75rem;
+            font-size: 0.75rem;
+            color: #999;
+            font-family: 'Courier New', monospace;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .code-wrapper pre { margin: 0; }
+
+        /* =====================================================================
+        CALLOUT BOXES
+        ===================================================================== */
+        .callout {
+            margin: 2rem 0;
+            padding: 1.25rem 1.75rem;
+            border-radius: 2px;
+            border-left: 4px solid;
+        }
+
+        .callout-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .callout p { text-indent: 0; margin-bottom: 0; font-size: 0.98rem; }
+
+        .callout.note { background: #f0f4ff; border-color: #3b72d9; color: #1a3a6e; }
+        .callout.warning { background: #fff8e1; border-color: #f0a500; color: #5a3e00; }
+        .callout.tip { background: #f0faf4; border-color: #28a745; color: #155724; }
+        .callout.danger { background: #fff0f0; border-color: #dc3545; color: #6b1a1a; }
+
+        /* =====================================================================
+        TABLE
+        ===================================================================== */
+        .post-body table { width: 100%; border-collapse: collapse; margin: 2rem 0; font-size: 0.97rem; }
+        .post-body th { border-bottom: 2px solid #2d2d2d; padding: 0.5rem 0.75rem; text-align: left; font-weight: 600; }
+        .post-body td { border-bottom: 1px solid #ddd; padding: 0.5rem 0.75rem; }
+        .post-body caption { caption-side: bottom; font-size: 0.85rem; font-style: italic; color: #777; margin-top: 0.5rem; text-align: center; }
+
+        /* =====================================================================
+        FIGURE
+        ===================================================================== */
+        figure.post-figure { margin: 2.5rem 0; text-align: center; }
+        figure.post-figure img { max-width: 100%; border: 1px solid #ddd; display: block; margin: 0 auto; }
+        figcaption { margin-top: 0.75rem; font-size: 0.9rem; font-style: italic; color: #666; }
+        figcaption strong { font-style: normal; font-weight: 600; }
+
+        /* =====================================================================
+        AUTHOR / FOOTER
+        ===================================================================== */
+        .post-footer {
+            margin-top: 4rem;
+            padding-top: 2rem;
+            border-top: 2px solid #ddd;
+            text-align: center;
+        }
+
+        .post-footer .btn { margin: 0 0.5rem; }
+
+        .author-info {
+            margin-top: 3rem;
+            padding: 2rem;
+            background-color: #f9f9f9;
+            border-left: 4px solid #0056b3;
+        }
+
+        .author-info h4 { margin-bottom: 0.5rem; font-weight: 600; }
+        .author-info p { text-indent: 0; margin-bottom: 0; }
+
+        footer {
+            background-color: #f8f9fa;
+            border-top: 1px solid #e0e0e0;
+            padding: 2rem 0;
+            margin-top: 3rem;
+        }
+
+        /* =====================================================================
+        DIAGRAM BOX (ASCII art wrapper)
+        ===================================================================== */
+        .diagram-box {
+            margin: 2rem 0;
+            background: #020c14;
+            color: #a8cce0;
+            padding: 1.5rem;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.82rem;
+            line-height: 1.5;
+            overflow-x: auto;
+            border: 1px solid #0d3554;
+        }
+
+        .diagram-box .accent { color: #00c8ff; }
+
+        /* References */
+        .references { margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid #ddd; }
+        .references h2 { font-size: 1.4rem; margin-bottom: 1rem; }
+        .references ol { padding-left: 1.5rem; font-size: 0.95rem; color: #555; }
+        .references ol li { margin-bottom: 0.5rem; line-height: 1.6; }
+
+        .citation-ref { vertical-align: super; font-size: 0.75em; color: #0056b3; text-decoration: none; font-style: normal; }
+
+        /* Comments */
+        .comments-section { margin-top: 4rem; padding-top: 2rem; border-top: 2px solid #ddd; }
+        .comments-section h2 { font-size: 1.6rem; margin-bottom: 2rem; }
+        .comment { display: flex; gap: 1rem; margin-bottom: 2rem; }
+        .comment-avatar { width: 42px; height: 42px; border-radius: 50%; background-color: #ddd; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; color: #777; border: 1px solid #ccc; }
+        .comment-body { flex: 1; }
+        .comment-meta { font-size: 0.85rem; color: #888; margin-bottom: 0.4rem; }
+        .comment-meta strong { color: #2d2d2d; font-weight: 600; }
+        .comment-text { font-size: 0.97rem; line-height: 1.7; color: #444; }
+        .comment-form { margin-top: 2.5rem; }
+        .comment-form h3 { font-size: 1.2rem; margin-bottom: 1rem; font-style: italic; }
+        .comment-form textarea, .comment-form input { font-family: Georgia, serif; font-size: 0.97rem; border: 1px solid #ccc; border-radius: 2px; padding: 0.6rem 0.8rem; width: 100%; margin-bottom: 0.75rem; background: #fefefe; color: #2d2d2d; }
+        .comment-form textarea { min-height: 120px; resize: vertical; }
+        .comment-form button { font-family: Georgia, serif; font-size: 0.97rem; padding: 0.5rem 1.5rem; }
+
+        @media (max-width: 768px) {
+            .post-container { padding: 2rem 1.5rem; }
+            .post-title { font-size: 2rem; }
+        }
+    </style>
+</head>
+
+<body class="d-flex flex-column min-vh-100">
+
+    <!-- NAVIGATION -->
+    <nav class="navbar navbar-expand-lg fixed-top navbar-light">
+        <div class="container">
+            <a class="navbar-brand" href="../../index.html">
+                <i class="fas fa-feather-alt"></i> JoHaN's Blog
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="../../index.html">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="../../about.html">About</a></li>
+                    <li class="nav-item"><a class="nav-link" href="../../archive.html">Archive</a></li>
+                    <li class="nav-item"><a class="nav-link" href="../../contact.html">Contact</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- MAIN CONTENT -->
+    <main class="flex-fill">
+        <article class="post-container">
+
+            <!-- POST HEADER -->
+            <header class="post-header">
+                <h1 class="post-title">Building a Home DevOps Lab on Commodity Hardware</h1>
+                <div class="post-date">
+                    <i class="far fa-calendar"></i>
+                    February 23, 2026
+                    <span class="mx-2">•</span>
+                    <i class="far fa-clock"></i>
+                    18 min read
+                </div>
+                <p class="post-subtitle">
+                    A complete GitOps pipeline — MicroK8s, Flask, PostgreSQL, Helm, ArgoCD, Gitea,
+                    and GitHub Actions — running on two repurposed servers and a laptop, with every
+                    lesson learned from double NAT, locked ISP modems, and misconfigured git remotes.
+                </p>
+            </header>
+
+            <!-- POST BODY -->
+            <div class="post-body">
+
+                <!-- OPENING -->
+                <p>
+                    There is a particular kind of satisfaction in running production-grade infrastructure
+                    on hardware you own. Cloud providers are extraordinary tools, but they abstract away
+                    the very friction that teaches you how distributed systems actually work. When a pod
+                    fails to schedule because you have genuinely run out of RAM — not because a quota
+                    was misconfigured — you learn something that no documentation can convey as efficiently.
+                    This post documents the end-to-end construction of a home DevOps lab: a two-node
+                    MicroK8s Kubernetes cluster running a containerised Flask application backed by
+                    PostgreSQL, deployed via Helm, orchestrated by ArgoCD watching a self-hosted Gitea
+                    repository, and continuously delivered by a GitHub Actions self-hosted runner — all
+                    on two low-spec servers and a laptop.
+                </p>
+
+                <p>
+                    The project began as a learning exercise and evolved into something closer to a
+                    reference architecture. Every component was chosen deliberately: MicroK8s for its
+                    low overhead on constrained hardware, Gitea for an on-premise Git server that keeps
+                    the GitOps source of truth inside the LAN, and a self-hosted GitHub Actions runner
+                    that eliminates the need to expose any port to the internet. The result is a system
+                    where a single <code>git push</code> from a laptop triggers a Docker build, a registry push,
+                    and a Helm upgrade — all running locally on the control plane node — while ArgoCD
+                    independently watches the Gitea repository and self-heals the cluster on any
+                    configuration drift.
+                </p>
+
+                <!-- SECTION 1 — HARDWARE -->
+                <h2>The Hardware and the Constraints</h2>
+
+                <p>
+                    The lab consists of three devices. A developer laptop serves as the workstation —
+                    the only machine that ever needs a graphical interface. Two low-specification
+                    servers, each with 4 GB of RAM and a dual-core processor, form the Kubernetes
+                    cluster: NODE1 acts as the control plane and hosts all supporting services, while
+                    NODE2 serves as a worker node that runs additional application replicas.
+                </p>
+
+                <p>
+                    Four gigabytes of RAM sounds generous until you account for the Ubuntu OS kernel
+                    (~400 MB), the MicroK8s API server and etcd (~250 MB on the control plane), CoreDNS,
+                    the Nginx ingress controller, the container registry, PostgreSQL, two Flask/Gunicorn
+                    pods, metrics-server, and the GitHub Actions runner. The following table shows the
+                    actual memory budget that emerged from measurement:
+                </p>
+
+                <table>
+                    <caption>Table 1. Estimated resident memory per component at idle on 4 GB nodes.</caption>
+                    <thead>
+                        <tr>
+                            <th>Component</th>
+                            <th>NODE1 (MB)</th>
+                            <th>NODE2 (MB)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Ubuntu OS + kernel</td><td>400</td><td>400</td></tr>
+                        <tr><td>MicroK8s API server + etcd</td><td>250</td><td>50</td></tr>
+                        <tr><td>CoreDNS</td><td>40</td><td>—</td></tr>
+                        <tr><td>Nginx Ingress Controller</td><td>80</td><td>—</td></tr>
+                        <tr><td>Container Registry (:32000)</td><td>50</td><td>—</td></tr>
+                        <tr><td>Gitea (Docker container)</td><td>80</td><td>—</td></tr>
+                        <tr><td>PostgreSQL (limit 256 Mi)</td><td>180</td><td>—</td></tr>
+                        <tr><td>webapp Pod × 1 (limit 256 Mi)</td><td>150</td><td>150</td></tr>
+                        <tr><td>metrics-server</td><td>30</td><td>—</td></tr>
+                        <tr><td>GitHub Actions Runner</td><td>85</td><td>—</td></tr>
+                        <tr><td>ArgoCD (optional)</td><td>300</td><td>—</td></tr>
+                        <tr><td><strong>Total (without ArgoCD)</strong></td><td><strong>~1,345</strong></td><td><strong>~600</strong></td></tr>
+                        <tr><td><strong>Free headroom</strong></td><td><strong>~2,655</strong></td><td><strong>~3,400</strong></td></tr>
+                    </tbody>
+                </table>
+
+                <div class="callout warning">
+                    <div class="callout-title"><i class="fas fa-exclamation-triangle"></i> Memory Caution</div>
+                    <p>The kube-prometheus-stack (Prometheus + Grafana + AlertManager) consumes
+                    500–700 MB of additional RAM. On these nodes it will push the control plane
+                    into memory pressure and cause OOMKill events. Use <code>metrics-server</code> instead,
+                    which provides <code>kubectl top</code> for approximately 30 MB.</p>
+                </div>
+
+                <!-- SECTION 2 — STACK -->
+                <h2>The Stack, and Why Each Piece</h2>
+
+                <p>
+                    Every component in the stack was chosen to answer a specific constraint. The
+                    application itself is a Flask webapp served by Gunicorn, backed by PostgreSQL,
+                    containerised with Docker, and deployed via a Helm chart. The chart controls
+                    replica count, resource limits, ingress rules, and the PostgreSQL node selector —
+                    ensuring the database always lands on NODE1 where its persistent volume lives.
+                </p>
+
+                <h3>MicroK8s over K3s or kubeadm</h3>
+                <p>
+                    MicroK8s was chosen for its addon system: enabling the local container registry,
+                    ingress controller, DNS, and Helm3 each takes a single command. Its containerd
+                    runtime is also straightforward to configure for an insecure local registry via
+                    <code>hosts.toml</code>, which matters because the registry runs over plain HTTP to
+                    avoid certificate management on the LAN.
+                </p>
+
+                <h3>Gitea for on-premise GitOps</h3>
+                <p>
+                    ArgoCD needs a Git repository to watch. Using GitHub directly would mean ArgoCD
+                    requires internet access for every sync operation — and any connectivity interruption
+                    would break GitOps. Running Gitea as a Docker container on NODE1 keeps the entire
+                    source-of-truth loop within the LAN. ArgoCD polls Gitea every three minutes; even
+                    a complete internet outage does not affect cluster self-healing.
+                </p>
+
+                <h3>Self-hosted GitHub Actions runner</h3>
+                <p>
+                    The original pipeline design used GitHub's cloud runners to SSH into NODE1 over
+                    the internet. This required opening a port on the home router — which proved
+                    impossible due to a locked ISP modem in a double NAT configuration. The self-hosted
+                    runner inverts the connection direction: NODE1 connects outbound to GitHub over
+                    HTTPS port 443, picks up jobs, and executes them locally. Outbound connections
+                    traverse any NAT topology without router configuration.
+                </p>
+
+                <blockquote>
+                    "The best network architecture is the one that works within your actual constraints,
+                    not the one that works in the ideal case described in the documentation."
+                    <cite>— A hard-won lesson from two days of port forwarding debugging</cite>
+                </blockquote>
+
+                <!-- SECTION 3 — ARCHITECTURE -->
+                <h2>Architecture Overview</h2>
+
+                <p>
+                    The system has three distinct data flows: the CI/CD pipeline triggered by a git
+                    push, the GitOps loop driven by ArgoCD, and user traffic arriving via the Nginx
+                    ingress controller. Understanding how these three flows interact — and where they
+                    share infrastructure — is key to reasoning about the system's behaviour.
+                </p>
+
+                <div class="diagram-box">
+<pre><span class="accent">LAPTOP</span>  ──git push──►  <span class="accent">GitHub</span>                    <span class="accent">Gitea</span> (NODE1:3000)
+                         │                              ▲
+                         │ Actions event                │ git push (HTTP)
+                         ▼                              │
+                  NODE1 runner ◄──outbound poll──────────┘
+                         │
+               ┌─────────┼──────────────┐
+               ▼         ▼              ▼
+          docker      docker         helm upgrade
+          build       push           webapp chart
+                    NODE1:32000            │
+                         │                ▼
+                         └──────► <span class="accent">Kubernetes Cluster</span>
+                                    │
+                          ┌─────────┴─────────┐
+                          ▼                   ▼
+                     webapp Pod 1        webapp Pod 2
+                     (NODE1)             (NODE2)
+                          │                   │
+                          └────────┬──────────┘
+                                   ▼
+                              PostgreSQL Pod
+                              (NODE1 only)
+                                   │
+                                   ▼
+                               PVC 2Gi
+                             (hostpath)</pre>
+                </div>
+
+                <p>
+                    ArgoCD runs as a separate loop, independently of the CI pipeline. It polls the
+                    Gitea repository every three minutes and applies any changes to the <code>charts/</code>
+                    directory. This means that chart configuration changes — replica counts, resource
+                    limits, ingress rules — are applied by ArgoCD, while application code changes
+                    are applied by the GitHub Actions runner. Both converge on the same cluster state.
+                </p>
+
+                <!-- SECTION 4 — GIT SETUP -->
+                <h2>The Three-Remote Git Configuration</h2>
+
+                <p>
+                    One of the most useful patterns that emerged from this project is the three-remote
+                    git configuration. The developer laptop maintains three remotes simultaneously:
+                    <code>origin</code> points to GitHub over SSH, <code>gitea</code> points to the local Gitea
+                    instance over HTTP, and <code>all</code> is a special remote that pushes to both
+                    destinations with a single command.
+                </p>
+
+                <div class="code-wrapper">
+                    <span class="code-lang">bash</span>
+                    <pre><code># Set up the three-remote configuration
+git remote add origin git@github.com:YOUR_USER/microk8s-devops-demo.git
+git remote add gitea http://NODE1_IP:3000/YOUR_USER/microk8s-devops-demo.git
+
+# The "all" remote fetches from GitHub but pushes to both
+git remote add all git@github.com:YOUR_USER/microk8s-devops-demo.git
+git remote set-url --add --push all git@github.com:YOUR_USER/microk8s-devops-demo.git
+git remote set-url --add --push all http://NODE1_IP:3000/YOUR_USER/microk8s-devops-demo.git
+
+# Daily workflow: one command, two destinations
+git push all main</code></pre>
+                </div>
+
+                <p>
+                    This configuration means that every push simultaneously updates GitHub (which
+                    triggers the CI pipeline) and Gitea (which ArgoCD polls for configuration changes).
+                    The authentication is handled transparently: the GitHub push uses the SSH key in
+                    <code>~/.ssh/id_ed25519</code> with no password prompt, and the Gitea push uses
+                    credentials stored in the macOS Keychain after the first successful authentication.
+                </p>
+
+                <div class="callout danger">
+                    <div class="callout-title"><i class="fas fa-times-circle"></i> Never Embed Credentials in Remote URLs</div>
+                    <p>A common mistake is allowing git to save credentials in the remote URL itself,
+                    producing entries like <code>http://user:token@192.168.0.102:3000/...</code> in
+                    <code>.git/config</code>. If that token is also stored in a global git credential helper
+                    shell function, it gets injected into <em>every</em> git operation regardless of remote,
+                    including pushes to completely unrelated hosts. Always use the OS credential manager
+                    (<code>osxkeychain</code> on macOS) and verify with <code>git config --global --list | grep credential</code>.</p>
+                </div>
+
+                <!-- SECTION 5 — NETWORK -->
+                <h2>The Double NAT Problem</h2>
+
+                <p>
+                    The original CI/CD design had GitHub's cloud-hosted runner SSH into NODE1 over
+                    the public internet. This requires the home router to forward an external port to
+                    NODE1's SSH daemon. In theory, straightforward. In practice, the network topology
+                    was more complex than expected.
+                </p>
+
+                <h3>Discovering the topology</h3>
+                <p>
+                    The home network had three networking devices: an ISP-provided GPON ONT fiber
+                    modem, a TP-Link home router, and a mesh WiFi extender. Running <code>ip route show default</code>
+                    on NODE1 revealed the gateway was the TP-Link at <code>192.168.0.1</code>. Checking the
+                    TP-Link's WAN IP in its admin interface showed <code>192.168.1.2</code> — a private address,
+                    not a public one. The ONT was at <code>192.168.1.1</code>, performing NAT between the ISP
+                    and the TP-Link. Double NAT.
+                </p>
+
+                <div class="diagram-box">
+<pre>Internet  (public IP: <span class="accent">45.186.209.180</span>)
+    │
+    ▼
+<span class="accent">GPON ONT</span>   192.168.1.1   ← NAT layer 1 (ISP-managed, menu locked)
+    │
+    ▼  gives TP-Link: 192.168.1.2
+<span class="accent">TP-Link</span>    192.168.0.1   ← NAT layer 2 (we control this)
+    │
+    ▼  gives NODE1: 192.168.0.102
+<span class="accent">NODE1</span>      192.168.0.102
+<span class="accent">NODE2</span>      192.168.0.x
+<span class="accent">LAPTOP</span>     192.168.0.x</pre>
+                </div>
+
+                <p>
+                    Port forwarding in double NAT requires two rules: one on the ONT forwarding the
+                    external port to the TP-Link's WAN IP, and one on the TP-Link forwarding that port
+                    to NODE1. The TP-Link rule was straightforward. The ONT was the problem — its admin
+                    interface at <code>192.168.1.1</code> was not reachable from the LAPTOP (which sits on the
+                    <code>192.168.0.x</code> network, on the other side of the TP-Link). A useful workaround:
+                    NODE1 <em>can</em> reach <code>192.168.1.1</code> because its packets traverse the TP-Link which
+                    knows both subnets. An SSH tunnel through NODE1 makes the ONT admin page accessible
+                    on the LAPTOP:
+                </p>
+
+                <div class="code-wrapper">
+                    <span class="code-lang">bash</span>
+                    <pre><code># On LAPTOP — forward local port 8181 to ONT admin via NODE1
+ssh -L 8181:192.168.1.1:80 user@NODE1_IP -N &
+
+# ONT admin page is now accessible at:
+open http://localhost:8181
+
+# Kill the tunnel when done
+kill %1</code></pre>
+                </div>
+
+                <div class="callout note">
+                    <div class="callout-title"><i class="fas fa-info-circle"></i> How SSH Tunnelling Works</div>
+                    <p>The <code>-L 8181:192.168.1.1:80</code> flag tells SSH to listen on LAPTOP port 8181
+                    and forward any traffic received there through the encrypted SSH connection to NODE1,
+                    which then forwards it to <code>192.168.1.1:80</code>. From the ONT's perspective the
+                    request comes from NODE1. From the browser's perspective it is talking to localhost.
+                    The SSH connection is the pipe connecting the two.</p>
+                </div>
+
+                <p>
+                    The ONT's admin interface, when reached via the tunnel, lacked any DMZ or port
+                    forwarding options — the ISP had stripped those menus from the firmware. At this
+                    point the port-forwarding approach was abandoned in favour of the self-hosted runner,
+                    which requires no inbound connectivity at all.
+                </p>
+
+                <!-- SECTION 6 — SELF HOSTED RUNNER -->
+                <h2>The Self-Hosted Runner Solution</h2>
+
+                <p>
+                    The GitHub Actions self-hosted runner is a lightweight agent that runs on NODE1
+                    and polls GitHub's API for pending jobs. The connection is entirely outbound —
+                    NODE1 initiates HTTPS requests to <code>api.github.com</code> on port 443. This traverses
+                    any NAT configuration without modification, because NAT devices allow outbound
+                    connections by default and track the state to route response packets back correctly.
+                </p>
+
+                <h3>Installation</h3>
+                <p>
+                    The runner is installed in a dedicated directory in the home folder of NODE1,
+                    separate from the project repository. After downloading and running the configuration
+                    script (with credentials provided by GitHub's setup wizard), the runner is registered
+                    as a systemd service:
+                </p>
+
+                <div class="code-wrapper">
+                    <span class="code-lang">bash</span>
+                    <pre><code># On NODE1 — install and start as a permanent system service
+cd ~/actions-runner
+sudo ./svc.sh install
+sudo ./svc.sh start
+
+# Verify
+sudo ./svc.sh status
+# Expected: active (running)
+
+# Confirm the runner is connected to GitHub
+sudo journalctl -u actions.runner.* -f
+# Expected line: Listening for Jobs</code></pre>
+                </div>
+
+                <h3>The simplified workflow</h3>
+                <p>
+                    Because the runner executes directly on NODE1 — where Docker, MicroK8s, and the
+                    local registry all live — the workflow file is dramatically simpler than the
+                    SSH-based alternative. No SSH setup, no rsync, no secrets for IPs or credentials.
+                    The NODE1 IP is resolved at runtime from <code>hostname -I</code>:
+                </p>
+
+                <div class="code-wrapper">
+                    <span class="code-lang">yaml</span>
+                    <pre><code>jobs:
+  deploy:
+    name: Deploy on NODE1
+    runs-on: self-hosted   # executes directly on NODE1
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build, push, upgrade
+        run: |
+          NODE1_IP=$(hostname -I | awk '{print $1}')
+          REGISTRY="${NODE1_IP}:32000"
+
+          docker build -t "${REGISTRY}/webapp:latest" app/
+          docker push "${REGISTRY}/webapp:latest"
+
+          microk8s helm3 upgrade webapp charts/webapp \
+            --set "image.repository=${REGISTRY}/webapp" \
+            --set "image.tag=latest" \
+            --reuse-values --wait --timeout 5m</code></pre>
+                </div>
+
+                <div class="callout tip">
+                    <div class="callout-title"><i class="fas fa-lightbulb"></i> Add workflow_dispatch for Manual Triggers</div>
+                    <p>The workflow's <code>on.push.paths</code> filter means pushes that only change documentation
+                    or the workflow file itself will not trigger a deploy. Add <code>workflow_dispatch:</code>
+                    to the <code>on:</code> block to enable a "Run workflow" button in the GitHub Actions UI —
+                    invaluable for testing the pipeline without making a dummy code change.</p>
+                </div>
+
+                <!-- SECTION 7 — GITOPS UI -->
+                <h2>The Mission-Control Dashboard</h2>
+
+                <p>
+                    The Flask application serves a single-page dashboard that demonstrates the key
+                    Kubernetes concepts at play: pod identity, node scheduling, database connectivity,
+                    and health probes. Refreshing the page causes the load balancer to rotate between
+                    replicas, changing the pod name displayed — a live demonstration of round-robin
+                    scheduling that is more viscerally convincing than any diagram.
+                </p>
+
+                <p>
+                    The original template was a minimal dark card layout. The redesigned version
+                    adopts a mission-control aesthetic: a CRT scanline overlay in CSS, an animated
+                    grid background, a live UTC clock in the top bar, and a 12-column grid layout
+                    with panel hierarchy. The pod name is split into its stable prefix and randomised
+                    suffix, the database status renders with an animated pulse indicator, and the
+                    health probe panel shows all three probe states simultaneously. The entire UI is
+                    self-contained in a single Jinja2 template with no external CSS dependencies —
+                    critical for a LAN-only deployment with no guaranteed internet access.
+                </p>
+
+                <figure class="post-figure">
+                    <img src="https://via.placeholder.com/760x420?text=Mission+Control+Dashboard+UI" alt="The redesigned Flask webapp dashboard showing pod name, node name, database status, and health probes in a dark mission-control aesthetic">
+                    <figcaption>
+                        <strong>Figure 1.</strong> The redesigned dashboard UI. Refreshing the page
+                        rotates between pod replicas, changing the pod name suffix and occasionally
+                        the node name — a live demonstration of Kubernetes load balancing.
+                    </figcaption>
+                </figure>
+
+                <!-- SECTION 8 — LESSONS -->
+                <h2>Lessons Learned</h2>
+
+                <h3>Start with the constraint, not the ideal design</h3>
+                <p>
+                    The SSH-from-internet pipeline was the obvious design. It was also the wrong one
+                    for this network. Spending time trying to make it work through a locked ISP modem
+                    was less productive than stepping back and asking: what does the self-hosted runner
+                    pattern cost, and does it eliminate the constraint? In this case it did — and
+                    simplified the pipeline as a side effect.
+                </p>
+
+                <h3>Double NAT is more common than the documentation implies</h3>
+                <p>
+                    Most home networking guides assume a single NAT device between the internet and
+                    the LAN. GPON fiber deployments increasingly install a modem-router that performs
+                    its own NAT before traffic reaches the home router, creating a double NAT topology.
+                    The diagnostic is simple: check the home router's WAN IP address. If it is in a
+                    private range (<code>192.168.x.x</code>, <code>10.x.x.x</code>), double NAT is present.
+                    The fix, if port forwarding is required, needs rules on both devices — or a call
+                    to the ISP to enable bridge mode on the ONT.
+                </p>
+
+                <h3>The git credential helper can be a hidden bomb</h3>
+                <p>
+                    A credential helper shell function hardcoded in the global git config will inject
+                    its credentials into every git operation, regardless of the remote being accessed.
+                    This can result in a GitHub Personal Access Token appearing in the username field
+                    of an HTTP request to a completely unrelated Gitea instance on the LAN. The diagnostic
+                    is <code>git config --global --list | grep credential</code>. The fix is
+                    <code>git config --global --unset-all credential.helper</code> followed by re-adding
+                    only the OS keychain helper.
+                </p>
+
+                <h3>ImagePullBackOff on worker nodes almost always means hosts.toml</h3>
+                <p>
+                    When worker nodes try to pull images from a local HTTP registry, containerd
+                    defaults to HTTPS and fails with a TLS error. The fix is a <code>hosts.toml</code> file
+                    that tells containerd to use plain HTTP for that specific registry address.
+                    This file must exist on every node that pulls images — not just the control plane
+                    where the registry runs.
+                </p>
+
+                <!-- SECTION 9 — KEY TAKEAWAYS -->
+                <h2>Key Takeaways</h2>
+
+                <h3>What worked well</h3>
+                <ul>
+                    <li><strong>MicroK8s addon system</strong> reduced cluster setup from hours to minutes. The snap install, enable dns storage ingress registry helm3 sequence is genuinely fast on commodity hardware.</li>
+                    <li><strong>Self-hosted runner</strong> eliminated all network configuration complexity. The outbound-only model is more robust than inbound SSH for home lab use cases.</li>
+                    <li><strong>Three-remote git configuration</strong> kept the LAPTOP, GitHub, and Gitea perfectly synchronised with a single command, feeding both the CI pipeline and the GitOps loop simultaneously.</li>
+                    <li><strong>ArgoCD self-healing</strong> proved its value immediately — accidentally deleting a deployment in a kubectl experiment caused ArgoCD to restore it within three minutes without any manual intervention.</li>
+                    <li><strong>Gitea on the LAN</strong> made GitOps independent of internet connectivity. The cluster continued to self-heal correctly during an ISP outage because ArgoCD only needed to reach the local Gitea instance.</li>
+                </ul>
+
+                <h3>What would be done differently</h3>
+                <ul>
+                    <li><strong>Static IPs from the start.</strong> Using DHCP for NODE1 until late in the project meant the IP changed once during a router restart, breaking the Gitea remote URL, the ArgoCD app.yaml, and the port forwarding rule simultaneously. Reserve the IP via DHCP reservation on day one.</li>
+                    <li><strong>Separate SSH keys for every purpose.</strong> Using the same SSH key for personal git access and automated CI access means any compromise requires rotating credentials in two places. One key per use case is worth the small overhead.</li>
+                    <li><strong>Server-side apply for ArgoCD from the beginning.</strong> The standard <code>kubectl apply</code> fails for ArgoCD's CRDs because the annotations exceed the annotation size limit. The <code>--server-side</code> flag resolves this, but discovering the failure mode cost time.</li>
+                </ul>
+
+                <!-- SECTION 10 — CONCLUSION -->
+                <h2>Conclusion</h2>
+                <p>
+                    A complete GitOps pipeline — from laptop keystroke to running pod — is achievable
+                    on hardware that costs less than a single month of equivalent cloud compute. The
+                    constraints of 4 GB RAM nodes and a locked ISP modem were not obstacles; they
+                    were the curriculum. Every workaround — the memory-tuned PostgreSQL manifest,
+                    the hosts.toml for HTTP image pulls, the self-hosted runner that eliminates
+                    inbound port requirements — produced a more resilient and better-understood
+                    system than the unconstrained version would have.
+                </p>
+                <p>
+                    The full project, including all scripts, Helm charts, workflow files, and
+                    documentation, is available on GitHub. The README includes a quick-start that
+                    installs the complete stack in a single command, and a detailed manual that
+                    walks through every component and every failure mode encountered during
+                    construction. If you have two spare servers and a weekend, this is a worthwhile
+                    way to spend it.
+                </p>
+
+                <!-- REFERENCES -->
+                <div class="references">
+                    <h2>References</h2>
+                    <ol>
+                        <li id="ref-1">
+                            Canonical Ltd. (2024). <em>MicroK8s Documentation</em>.
+                            Retrieved from <a href="https://microk8s.io/docs" target="_blank">https://microk8s.io/docs</a>
+                        </li>
+                        <li id="ref-2">
+                            Argo Project Authors. (2024). <em>ArgoCD — Declarative GitOps CD for Kubernetes</em>.
+                            Retrieved from <a href="https://argo-cd.readthedocs.io" target="_blank">https://argo-cd.readthedocs.io</a>
+                        </li>
+                        <li id="ref-3">
+                            Gitea Authors. (2024). <em>Gitea — Git with a Cup of Tea</em>.
+                            Retrieved from <a href="https://gitea.io" target="_blank">https://gitea.io</a>
+                        </li>
+                        <li id="ref-4">
+                            GitHub, Inc. (2024). <em>About self-hosted runners — GitHub Actions Documentation</em>.
+                            Retrieved from <a href="https://docs.github.com/en/actions/hosting-your-own-runners/managing-self-hosted-runners/about-self-hosted-runners" target="_blank">https://docs.github.com/en/actions/hosting-your-own-runners</a>
+                        </li>
+                        <li id="ref-5">
+                            The Helm Authors. (2024). <em>Helm — The Kubernetes Package Manager</em>.
+                            Retrieved from <a href="https://helm.sh/docs/" target="_blank">https://helm.sh/docs/</a>
+                        </li>
+                    </ol>
+                </div>
+
+            </div><!-- /.post-body -->
+
+            <!-- AUTHOR INFO -->
+            <div class="author-info">
+                <h4><i class="fas fa-user-circle"></i> About the Author</h4>
+                <p>
+                    Johan Montesinos is a software and DevOps engineer with an interest in infrastructure,
+                    distributed systems, and building things that work on hardware you actually own.
+                    He writes about the intersection of theory and the constraints that reveal it.
+                </p>
+            </div>
+
+            <!-- POST FOOTER -->
+            <footer class="post-footer">
+                <a href="../../index.html" class="btn btn-outline-secondary">
+                    <i class="fas fa-arrow-left"></i> Back to Home
+                </a>
+                <a href="https://github.com/JohanMontesinos/microk8s-devops-demo" class="btn btn-outline-primary" target="_blank">
+                    <i class="fab fa-github"></i> View on GitHub
+                </a>
+            </footer>
+
+            <!-- COMMENTS -->
+            <section class="comments-section">
+                <h2><i class="far fa-comments"></i> Comments</h2>
+
+                <div class="comment">
+                    <div class="comment-avatar"><i class="fas fa-user"></i></div>
+                    <div class="comment-body">
+                        <div class="comment-meta">
+                            <strong>Alex K.</strong> · February 23, 2026 at 14:32
+                        </div>
+                        <div class="comment-text">
+                            The three-remote git setup is something I've never seen documented so clearly.
+                            I've been doing it manually with two push commands for years. Going to adopt
+                            this pattern immediately. Thanks for the write-up.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="comment">
+                    <div class="comment-avatar"><i class="fas fa-user"></i></div>
+                    <div class="comment-body">
+                        <div class="comment-meta">
+                            <strong>Maria T.</strong> · February 23, 2026 at 16:05
+                        </div>
+                        <div class="comment-text">
+                            The double NAT section saved me hours. I hit exactly this situation with
+                            a fiber ONT and spent a long time wondering why my port forwards on the
+                            home router were not working. The <code>ip route</code> diagnostic is the key.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="comment-form">
+                    <h3>Leave a Comment</h3>
+                    <input type="text" placeholder="Your name">
+                    <input type="email" placeholder="your@email.com (not published)">
+                    <textarea placeholder="Write your comment here…"></textarea>
+                    <button type="button" class="btn btn-outline-primary">Post Comment</button>
+                </div>
+            </section>
+
+        </article>
+    </main>
+
+    <!-- SITE FOOTER -->
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <p class="mb-0">&copy; 2026 JoHaN's Blog. All rights reserved.</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <a href="https://github.com/JohanMontesinos/" class="text-decoration-none me-3">
+                        <i class="fab fa-github"></i> GitHub
+                    </a>
+                    <a href="https://x.com/johanmontesinos" class="text-decoration-none me-3">
+                        <i class="fab fa-twitter"></i> X
+                    </a>
+                    <a href="mailto:johan.montesinos@outlook.com" class="text-decoration-none">
+                        <i class="fas fa-envelope"></i> Email
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
