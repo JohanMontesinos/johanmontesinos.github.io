@@ -501,17 +501,17 @@
                 </p>
 
                 <div class="diagram-box">
-<pre><span class="accent">LAPTOP</span>  ──git push──►  <span class="accent">GitHub</span>                    <span class="accent">Gitea</span> (NODE1:3000)
+<pre><span class="accent">LAPTOP</span>  ──git push ──►  <span class="accent">GitHub</span>                    <span class="accent">Gitea</span> (NODE1:3000)
                          │                              ▲
                          │ Actions event                │ git push (HTTP)
                          ▼                              │
-                  NODE1 runner ◄──outbound poll──────────┘
+                  NODE1 runner ◄──outbound poll─────────┘
                          │
                ┌─────────┼──────────────┐
                ▼         ▼              ▼
           docker      docker         helm upgrade
           build       push           webapp chart
-                    NODE1:32000            │
+                    NODE1:32000           │
                          │                ▼
                          └──────► <span class="accent">Kubernetes Cluster</span>
                                     │
