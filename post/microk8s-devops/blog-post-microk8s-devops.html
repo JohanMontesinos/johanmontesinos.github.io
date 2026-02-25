@@ -377,6 +377,10 @@
                 </p>
 
                 <p>
+                    <a href="https://github.com/JohanMontesinos/microk8s-devops-demo"><i class="fab fa-github"></i> View on GitHub</a>
+                </p>
+
+                <p>
                     The project began as a learning exercise and evolved into something closer to a
                     reference architecture. Every component was chosen deliberately: MicroK8s for its
                     low overhead on constrained hardware, Gitea for an on-premise Git server that keeps
@@ -501,14 +505,14 @@
                          │                              ▲
                          │ Actions event                │ git push (HTTP)
                          ▼                              │
-                  NODE1 runner ◄──outbound poll──────────┘
+                  NODE1 runner ◄──outbound poll─────────┘
                          │
                ┌─────────┼──────────────┐
                ▼         ▼              ▼
           docker      docker         helm upgrade
           build       push           webapp chart
                     NODE1:32000            │
-                         │                ▼
+                         │                 ▼
                          └──────► <span class="accent">Kubernetes Cluster</span>
                                     │
                           ┌─────────┴─────────┐
@@ -903,21 +907,22 @@ sudo journalctl -u actions.runner.* -f
                 ║  Step 3: Visit giscus.app → fill in your repo → copy script ║
                 ╚══════════════════════════════════════════════════════════════╝
                 -->
-                <script src="https://giscus.app/client.js"
+                <script src="https://giscus.app/client.js" 
                     data-repo="JohanMontesinos/johanmontesinos.github.io"
-                    data-repo-id="REPLACE_WITH_REPO_ID"
+                    data-repo-id="R_kgDOMDZSDQ"
                     data-category="General"
-                    data-category-id="REPLACE_WITH_CATEGORY_ID"
+                    data-category-id="DIC_kwDOMDZSDc4C3MPt"
                     data-mapping="pathname"
                     data-strict="0"
                     data-reactions-enabled="1"
                     data-emit-metadata="0"
-                    data-input-position="bottom"
+                    data-input-position="top"
                     data-theme="light"
                     data-lang="en"
-                    crossorigin="anonymous"
+                    data-loading="lazy"
+                    crossorigin="anonymous" 
                     async>
-                </script>
+                    </script>
             </section>
 
         </article>
