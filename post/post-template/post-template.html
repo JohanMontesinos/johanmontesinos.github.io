@@ -4,20 +4,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Beauty of Euler's Identity - LaTeX Blog</title>
+    <title>[POST TITLE] - JoHaN's Blog</title>
 
     <!-- Bootstrap CSS -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
-
     <!-- FontAwesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 
+    <!-- MathJax for rendering LaTeX equations -->
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            },
+            svg: { fontCache: 'global' }
+        };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" async></script>
+
     <!-- Custom CSS Files -->
-    <link href="sticky-footer-navbar.css" rel="stylesheet">
-    <link href="cmun-serif.css" rel="stylesheet">
-    <link href="cmun-serif-slanted.css" rel="stylesheet">
+    <!-- NOTE: path depth ../../ assumes post is at /post/slug/post.html -->
+    <!-- Adjust if your folder depth is different                         -->
+    <link href="../../sticky-footer-navbar.css" rel="stylesheet">
+    <link href="../../cmun-serif.css" rel="stylesheet">
+    <link href="../../cmun-serif-slanted.css" rel="stylesheet">
 
     <style>
+        /* =====================================================================
+           BASE STYLES  (identical to existing posts — do not modify)
+           ===================================================================== */
         body {
             font-family: 'Computer Modern Serif', 'CMU Serif', Georgia, serif;
             background-color: #fefefe;
@@ -38,11 +54,11 @@
             letter-spacing: 0.5px;
         }
 
-        main {
-            padding-top: 6rem;
-            padding-bottom: 4rem;
-        }
+        main { padding-top: 6rem; padding-bottom: 4rem; }
 
+        /* =====================================================================
+           POST LAYOUT
+           ===================================================================== */
         .post-container {
             max-width: 800px;
             margin: 0 auto;
@@ -73,9 +89,7 @@
             font-style: italic;
         }
 
-        .post-date i {
-            margin-right: 0.5rem;
-        }
+        .post-date i { margin-right: 0.5rem; }
 
         .post-subtitle {
             font-size: 1.3rem;
@@ -85,10 +99,10 @@
             margin-top: 1.5rem;
         }
 
-        .post-body {
-            text-align: justify;
-            hyphens: auto;
-        }
+        /* =====================================================================
+           POST BODY — GENERAL TYPOGRAPHY
+           ===================================================================== */
+        .post-body { text-align: justify; hyphens: auto; }
 
         .post-body h2 {
             font-size: 1.8rem;
@@ -106,15 +120,10 @@
             font-style: italic;
         }
 
-        .post-body p {
-            margin-bottom: 1.5rem;
-            text-indent: 1.5em;
-        }
+        .post-body p { margin-bottom: 1.5rem; text-indent: 1.5em; }
+        .post-body p:first-of-type { text-indent: 0; }
 
-        .post-body p:first-of-type {
-            text-indent: 0;
-        }
-
+        /* Drop cap on the very first paragraph */
         .post-body p:first-of-type::first-letter {
             font-size: 3.5rem;
             font-weight: 700;
@@ -124,6 +133,25 @@
             margin-top: 0.1em;
         }
 
+        .post-body em     { font-style: italic; }
+        .post-body strong { font-weight: 600; }
+
+        .post-body a {
+            color: #0056b3;
+            text-decoration: none;
+            border-bottom: 1px solid transparent;
+            transition: border-bottom 0.2s;
+        }
+
+        .post-body a:hover { border-bottom: 1px solid #0056b3; }
+        .post-body ul, .post-body ol { margin-bottom: 1.5rem; padding-left: 2rem; }
+        .post-body li { margin-bottom: 0.75rem; }
+
+        /* =====================================================================
+           ELEMENT TEMPLATES — REUSABLE COMPONENTS
+           ===================================================================== */
+
+        /* ----- BLOCKQUOTE ----- */
         .post-body blockquote {
             margin: 2rem 0;
             padding: 1rem 2rem;
@@ -133,6 +161,71 @@
             color: #555;
         }
 
+        .post-body blockquote cite {
+            display: block;
+            margin-top: 0.75rem;
+            font-size: 0.9rem;
+            font-style: normal;
+            color: #888;
+        }
+
+        /* ----- CITATION ----- */
+        .citation-ref {
+            vertical-align: super;
+            font-size: 0.75em;
+            color: #0056b3;
+            text-decoration: none;
+            font-style: normal;
+        }
+
+        .citation-ref:hover { text-decoration: underline; }
+
+        .references { margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid #ddd; }
+        .references h2 { font-size: 1.4rem; margin-bottom: 1rem; }
+        .references ol { padding-left: 1.5rem; font-size: 0.95rem; color: #555; }
+        .references ol li { margin-bottom: 0.5rem; line-height: 1.6; }
+
+        /* ----- EQUATION BLOCK ----- */
+        .equation-block {
+            margin: 2rem 0;
+            padding: 1.5rem 2rem;
+            background-color: #f9f9f9;
+            border: 1px solid #e8e8e8;
+            border-radius: 2px;
+            text-align: center;
+            overflow-x: auto;
+        }
+
+        .equation-block .eq-label {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .equation-block .eq-number {
+            font-size: 0.9rem;
+            color: #888;
+            min-width: 3rem;
+            text-align: right;
+        }
+
+        /* ----- FIGURE ----- */
+        figure.post-figure { margin: 2.5rem 0; text-align: center; }
+
+        figure.post-figure img {
+            max-width: 100%;
+            border: 1px solid #ddd;
+            display: block;
+            margin: 0 auto;
+        }
+
+        figcaption { margin-top: 0.75rem; font-size: 0.9rem; font-style: italic; color: #666; }
+        figcaption strong { font-style: normal; font-weight: 600; }
+
+        .figure-row { display: flex; gap: 1.5rem; margin: 2.5rem 0; justify-content: center; }
+        .figure-row figure.post-figure { flex: 1; margin: 0; }
+
+        /* ----- CODE ----- */
         .post-body code {
             font-family: 'Courier New', monospace;
             background-color: #f5f5f5;
@@ -147,52 +240,71 @@
             border-radius: 5px;
             overflow-x: auto;
             margin: 2rem 0;
+            border: 1px solid #e8e8e8;
+            font-size: 0.92rem;
+            line-height: 1.6;
         }
 
-        .post-body pre code {
-            background: none;
-            padding: 0;
+        .post-body pre code { background: none; padding: 0; }
+        .code-wrapper { position: relative; margin: 2rem 0; }
+
+        .code-wrapper .code-lang {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.75rem;
+            font-size: 0.75rem;
+            color: #999;
+            font-family: 'Courier New', monospace;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
         }
 
-        .post-body ul,
-        .post-body ol {
-            margin-bottom: 1.5rem;
-            padding-left: 2rem;
-        }
+        .code-wrapper pre { margin: 0; }
 
-        .post-body li {
-            margin-bottom: 0.75rem;
-        }
+        /* ----- CALLOUT BOXES ----- */
+        .callout { margin: 2rem 0; padding: 1.25rem 1.75rem; border-radius: 2px; border-left: 4px solid; }
 
-        .post-body em {
-            font-style: italic;
-        }
-
-        .post-body strong {
+        .callout-title {
             font-weight: 600;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
 
-        .post-body a {
-            color: #0056b3;
-            text-decoration: none;
-            border-bottom: 1px solid transparent;
-            transition: border-bottom 0.2s;
+        .callout p { text-indent: 0; margin-bottom: 0; font-size: 0.98rem; }
+        .callout.note    { background: #f0f4ff; border-color: #3b72d9; color: #1a3a6e; }
+        .callout.warning { background: #fff8e1; border-color: #f0a500; color: #5a3e00; }
+        .callout.tip     { background: #f0faf4; border-color: #28a745; color: #155724; }
+        .callout.danger  { background: #fff0f0; border-color: #dc3545; color: #6b1a1a; }
+
+        /* ----- TABLE ----- */
+        .post-body table { width: 100%; border-collapse: collapse; margin: 2rem 0; font-size: 0.97rem; }
+        .post-body th { border-bottom: 2px solid #2d2d2d; padding: 0.5rem 0.75rem; text-align: left; font-weight: 600; }
+        .post-body td { border-bottom: 1px solid #ddd; padding: 0.5rem 0.75rem; }
+        .post-body caption { caption-side: bottom; font-size: 0.85rem; font-style: italic; color: #777; margin-top: 0.5rem; text-align: center; }
+
+        /* ----- THEOREM BOX ----- */
+        .theorem-box {
+            margin: 2rem 0;
+            padding: 1.25rem 1.75rem;
+            border: 1px solid #c0c8d8;
+            background: #f5f7fb;
+            border-radius: 2px;
         }
 
-        .post-body a:hover {
-            border-bottom: 1px solid #0056b3;
-        }
+        .theorem-box .theorem-label { font-weight: 700; font-style: italic; margin-bottom: 0.5rem; color: #2d2d2d; }
+        .theorem-box p { text-indent: 0; margin-bottom: 0; font-style: italic; }
 
-        .post-footer {
-            margin-top: 4rem;
-            padding-top: 2rem;
-            border-top: 2px solid #ddd;
-            text-align: center;
-        }
+        /* ----- COMMENTS SECTION ----- */
+        .comments-section { margin-top: 4rem; padding-top: 2rem; border-top: 2px solid #ddd; }
+        .comments-section h2 { font-size: 1.6rem; margin-bottom: 2rem; }
 
-        .post-footer .btn {
-            margin: 0 0.5rem;
-        }
+        /* =====================================================================
+           FOOTER  (identical to existing posts — do not modify)
+           ===================================================================== */
+        .post-footer { margin-top: 4rem; padding-top: 2rem; border-top: 2px solid #ddd; text-align: center; }
+        .post-footer .btn { margin: 0 0.5rem; }
 
         .author-info {
             margin-top: 3rem;
@@ -201,42 +313,23 @@
             border-left: 4px solid #0056b3;
         }
 
-        .author-info h4 {
-            margin-bottom: 0.5rem;
-            font-weight: 600;
-        }
+        .author-info h4 { margin-bottom: 0.5rem; font-weight: 600; }
+        .author-info p  { text-indent: 0; margin-bottom: 0; }
 
-        .author-info p {
-            text-indent: 0;
-            margin-bottom: 0;
-        }
-
-        .footer {
-            background-color: #f8f9fa;
-            border-top: 1px solid #ddd;
-            padding: 2rem 0;
-            text-align: center;
-            color: #666;
-        }
+        footer { background-color: #f8f9fa; border-top: 1px solid #e0e0e0; padding: 2rem 0; margin-top: 3rem; }
 
         @media (max-width: 768px) {
-            .post-container {
-                padding: 2rem 1.5rem;
-            }
-
-            .post-title {
-                font-size: 2rem;
-            }
-
-            .post-subtitle {
-                font-size: 1.1rem;
-            }
+            .post-container { padding: 2rem 1.5rem; }
+            .post-title     { font-size: 2rem; }
+            .post-subtitle  { font-size: 1.1rem; }
+            .figure-row     { flex-direction: column; }
         }
     </style>
 </head>
 
 <body class="d-flex flex-column min-vh-100">
-    <!-- Navigation -->
+
+    <!-- NAVIGATION -->
     <nav class="navbar navbar-expand-lg fixed-top navbar-light">
         <div class="container">
             <a class="navbar-brand" href="../../index.html">
@@ -247,149 +340,273 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="../../index.html">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="../../about.html">About</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="../../archive.html">Archive</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="../../contact.html">Contact</a>
-                    </li>
+                    <li class="nav-item"><a class="nav-link" href="../../index.html">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="../../about.html">About</a></li>
+                    <li class="nav-item"><a class="nav-link" href="../../archive.html">Archive</a></li>
+                    <li class="nav-item"><a class="nav-link" href="../../contact.html">Contact</a></li>
                 </ul>
             </div>
         </div>
     </nav>
 
-    <!-- Main Content -->
+    <!-- MAIN CONTENT -->
     <main class="flex-fill">
         <article class="post-container">
-            <!-- Post Header -->
+
+            <!-- ── POST HEADER ─────────────────────────────────────────── -->
             <header class="post-header">
-                <h1 class="post-title">The Beauty of Euler's Identity</h1>
+                <!-- REPLACE: Post title -->
+                <h1 class="post-title">[Post Title Goes Here]</h1>
+
                 <div class="post-date">
-                    <i class="far fa-calendar"></i> November 28, 2025
+                    <i class="far fa-calendar"></i>
+                    <!-- REPLACE: Publication date -->
+                    Month DD, YYYY
                     <span class="mx-2">•</span>
-                    <i class="far fa-clock"></i> 8 min read
+                    <i class="far fa-clock"></i>
+                    <!-- REPLACE: Estimated reading time -->
+                    N min read
                 </div>
+
+                <!-- REPLACE: One-sentence subtitle / abstract -->
                 <p class="post-subtitle">
-                    A deep dive into one of the most elegant equations in mathematics, where five fundamental constants
-                    unite in perfect harmony
+                    A concise subtitle that captures the essence of the post in one or two sentences.
                 </p>
             </header>
 
-            <!-- Post Body -->
+            <!-- ── POST BODY ───────────────────────────────────────────── -->
             <div class="post-body">
+
+                <!-- ====================================================
+                     1. OPENING PARAGRAPHS
+                     First paragraph gets a drop-cap automatically.
+                     ==================================================== -->
                 <p>
-                    In the vast landscape of mathematical discoveries, few equations possess the elegant simplicity and
-                    profound depth of Euler's Identity. This remarkable formula, <em>e<sup>iπ</sup> + 1 = 0</em>, brings
-                    together five of the most important numbers in mathematics in a single, breathtaking expression.
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor
+                    incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
+                    exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.<a href="#ref-1" class="citation-ref">[1]</a>
                 </p>
 
                 <p>
-                    The identity connects the exponential function, the imaginary unit, the ratio of a circle's
-                    circumference to its diameter, the multiplicative identity, and the additive identity. Each of these
-                    constants arose independently across different branches of mathematics, yet they converge in this
-                    singular equation with an almost mystical precision.
+                    Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt
+                    mollit anim id est laborum.<a href="#ref-2" class="citation-ref">[2]</a>
                 </p>
 
-                <h2>The Historical Context</h2>
+                <!-- ====================================================
+                     2. SECTION HEADING  (h2 = major, h3 = minor)
+                     ==================================================== -->
+                <h2>Section Title</h2>
 
                 <p>
-                    Leonhard Euler, the 18th-century Swiss mathematician, discovered this identity while exploring the
-                    relationship between trigonometric functions and complex exponentials. His work laid the foundation
-                    for complex analysis, a field that would prove essential to both pure and applied mathematics.
+                    Donec eu libero sit amet quam egestas semper. Aenean ultricies mi vitae est.
+                    Mauris placerat eleifend leo.
                 </p>
+
+                <h3>Subsection Title</h3>
 
                 <p>
-                    Before Euler's breakthrough, mathematicians treated real and imaginary numbers as separate entities.
-                    The notion that raising an irrational number to an imaginary power could yield a simple integer
-                    seemed incomprehensible. Yet through careful analysis and ingenious reasoning, Euler demonstrated
-                    that these disparate concepts were intimately connected.
+                    Aenean fermentum, elit eget tincidunt condimentum, eros ipsum rutrum orci,
+                    sagittis tempus lacus enim ac dui.
                 </p>
 
+                <!-- ====================================================
+                     3. BLOCKQUOTE / PULL QUOTE
+                     ==================================================== -->
                 <blockquote>
-                    "Euler's identity reaches down into the very depths of existence, connecting the most fundamental
-                    mathematical constants in a way that feels almost supernatural." — Keith Devlin, mathematician
+                    "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+                    <cite>— Author Name, <em>Book or Article Title</em>, Year</cite>
                 </blockquote>
 
-                <h2>Understanding the Components</h2>
-
-                <h3>The Number <em>e</em></h3>
-
+                <!-- ====================================================
+                     4. INLINE EQUATION  (use $ … $ in text)
+                     ==================================================== -->
                 <p>
-                    The base of the natural logarithm, approximately 2.71828, appears throughout calculus and analysis.
-                    It describes continuous growth, from compound interest to population dynamics. Its unique
-                    property—that the derivative of <em>e<sup>x</sup></em> equals itself—makes it indispensable in
-                    differential equations.
+                    The relationship between energy and mass is $E = mc^2$, and the quadratic
+                    formula $x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}$ gives roots of any
+                    second-degree polynomial.
                 </p>
 
-                <h3>The Imaginary Unit <em>i</em></h3>
+                <!-- ====================================================
+                     5. DISPLAY / BLOCK EQUATION  (numbered)
+                     ==================================================== -->
+                <div class="equation-block">
+                    <div class="eq-label">
+                        <span></span>
+                        <!-- REPLACE: LaTeX equation between \[ and \] -->
+                        \[
+                            \int_{-\infty}^{\infty} e^{-x^2}\, dx = \sqrt{\pi}
+                        \]
+                        <span class="eq-number">(1)</span>
+                    </div>
+                </div>
 
-                <p>
-                    Defined as the square root of negative one, the imaginary unit extends the real number system into
-                    the complex plane. Despite its somewhat misleading name, <em>i</em> proves crucial in fields ranging
-                    from quantum mechanics to electrical engineering, where it elegantly represents phase and rotation.
-                </p>
+                <!-- ====================================================
+                     6. THEOREM / DEFINITION BOX
+                     ==================================================== -->
+                <div class="theorem-box">
+                    <div class="theorem-label">Theorem 1 (Example Theorem).</div>
+                    <p>
+                        Let $f : \mathbb{R} \to \mathbb{R}$ be continuous on $[a, b]$. Then
+                        $\exists\, c \in (a,b)$ such that $f'(c) = \dfrac{f(b)-f(a)}{b-a}$.
+                    </p>
+                </div>
 
-                <h3>The Constant π</h3>
+                <!-- ====================================================
+                     7. SINGLE FIGURE
+                     ==================================================== -->
+                <figure class="post-figure">
+                    <!-- REPLACE src and alt -->
+                    <img src="https://via.placeholder.com/760x400?text=Figure+1" alt="Descriptive alt text">
+                    <figcaption>
+                        <strong>Figure 1.</strong> Caption describing the image. Source: Author / License.
+                    </figcaption>
+                </figure>
 
-                <p>
-                    Perhaps the most famous mathematical constant, π represents the ratio of a circle's circumference to
-                    its diameter. Its appearance in Euler's identity connects the world of exponentials and imaginaries
-                    to the fundamental geometry of circles, revealing deep structural relationships in mathematics.
-                </p>
+                <!-- ====================================================
+                     8. SIDE-BY-SIDE FIGURES
+                     ==================================================== -->
+                <div class="figure-row">
+                    <figure class="post-figure">
+                        <img src="https://via.placeholder.com/380x280?text=Figure+2a" alt="Left figure">
+                        <figcaption><strong>Figure 2a.</strong> Left panel.</figcaption>
+                    </figure>
+                    <figure class="post-figure">
+                        <img src="https://via.placeholder.com/380x280?text=Figure+2b" alt="Right figure">
+                        <figcaption><strong>Figure 2b.</strong> Right panel.</figcaption>
+                    </figure>
+                </div>
 
-                <h2>The Deeper Significance</h2>
+                <!-- ====================================================
+                     9. CALLOUT BOXES — delete variants you don't need
+                     ==================================================== -->
+                <div class="callout note">
+                    <div class="callout-title"><i class="fas fa-info-circle"></i> Note</div>
+                    <p>Supplementary information the reader might find useful.</p>
+                </div>
 
-                <p>
-                    What makes Euler's identity truly extraordinary is not merely that it connects these constants, but
-                    <em>how</em> it does so. The equation embodies a kind of mathematical minimalism—no extraneous
-                    terms, no arbitrary coefficients, just five numbers and three operations yielding zero.
-                </p>
+                <div class="callout tip">
+                    <div class="callout-title"><i class="fas fa-lightbulb"></i> Tip</div>
+                    <p>Practical advice or a helpful shortcut.</p>
+                </div>
 
-                <p>
-                    Physicists have found parallels to Euler's identity throughout nature. Wave functions in quantum
-                    mechanics, alternating currents in electrical systems, and oscillations in mechanical structures all
-                    exhibit behavior describable through complex exponentials. The identity serves as a bridge between
-                    abstract mathematical theory and physical reality.
-                </p>
+                <div class="callout warning">
+                    <div class="callout-title"><i class="fas fa-exclamation-triangle"></i> Warning</div>
+                    <p>A common pitfall or caveat the reader should be aware of.</p>
+                </div>
 
-                <p>
-                    Moreover, the identity demonstrates that mathematics possesses an inherent beauty independent of its
-                    applications. Like a perfectly composed symphony or an masterfully crafted poem, Euler's identity
-                    achieves a kind of aesthetic perfection that transcends mere utility.
-                </p>
+                <div class="callout danger">
+                    <div class="callout-title"><i class="fas fa-times-circle"></i> Important</div>
+                    <p>Critical information — incorrect application leads to significant errors.</p>
+                </div>
 
+                <!-- ====================================================
+                     10. BULLETED LIST
+                     ==================================================== -->
+                <h3>Key Points</h3>
+                <ul>
+                    <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</li>
+                    <li>Ut enim ad minim veniam, quis nostrud exercitation ullamco.</li>
+                    <li>Duis aute irure dolor in reprehenderit in voluptate velit.</li>
+                    <li>Excepteur sint occaecat cupidatat non proident deserunt.</li>
+                </ul>
+
+                <!-- ====================================================
+                     11. NUMBERED LIST
+                     ==================================================== -->
+                <h3>Step-by-Step Process</h3>
+                <ol>
+                    <li>First, lorem ipsum dolor sit amet, consectetur adipiscing elit.</li>
+                    <li>Next, ut enim ad minim veniam, quis nostrud exercitation.</li>
+                    <li>Then, duis aute irure dolor in reprehenderit in voluptate.</li>
+                    <li>Finally, excepteur sint occaecat cupidatat non proident.</li>
+                </ol>
+
+                <!-- ====================================================
+                     12. TABLE
+                     ==================================================== -->
+                <table>
+                    <caption>Table 1. Caption describing the data.</caption>
+                    <thead>
+                        <tr>
+                            <th>Parameter</th>
+                            <th>Symbol</th>
+                            <th>Value</th>
+                            <th>Units</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Lorem ipsum</td><td>$\alpha$</td><td>3.14159</td><td>rad</td></tr>
+                        <tr><td>Dolor sit amet</td><td>$\beta$</td><td>2.71828</td><td>—</td></tr>
+                        <tr><td>Consectetur</td><td>$\gamma$</td><td>1.61803</td><td>m/s</td></tr>
+                    </tbody>
+                </table>
+
+                <!-- ====================================================
+                     13. CODE BLOCK  (change code-lang label as needed)
+                     ==================================================== -->
+                <div class="code-wrapper">
+                    <span class="code-lang">python</span>
+                    <pre><code># REPLACE with your actual code
+import numpy as np
+
+def example(x: float) -> float:
+    return np.sin(x)
+
+print(example(np.pi / 2))   # → 1.0</code></pre>
+                </div>
+
+                <!-- ====================================================
+                     14. CONCLUSION
+                     ==================================================== -->
                 <h2>Conclusion</h2>
 
                 <p>
-                    Euler's identity stands as a testament to the unity underlying mathematical thought. It reminds us
-                    that despite mathematics' many branches and specializations, fundamental connections persist
-                    throughout the discipline. In revealing these connections, the identity offers not just a useful
-                    tool, but a glimpse into the elegant structure of mathematical truth itself.
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor
+                    incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
+                    exercitation ullamco laboris.
                 </p>
 
                 <p>
-                    For students encountering it for the first time, the identity often sparks wonder and curiosity
-                    about mathematics' hidden depths. For researchers, it continues to inspire new investigations into
-                    the relationships between different mathematical domains. And for all who appreciate it, Euler's
-                    identity remains a beautiful reminder of mathematics' power to surprise, unify, and illuminate.
+                    Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
+                    fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident deserunt.
                 </p>
-            </div>
 
-            <!-- Author Info -->
+                <!-- ====================================================
+                     15. REFERENCES
+                     ==================================================== -->
+                <div class="references">
+                    <h2>References</h2>
+                    <ol>
+                        <li id="ref-1">
+                            Author, A. B., &amp; Author, C. D. (YYYY).
+                            <em>Title of the book or article</em>.
+                            Publisher / Journal, Vol(Issue), pp. 000–000.
+                            <a href="#">https://doi.org/10.xxxx/xxxxx</a>
+                        </li>
+                        <li id="ref-2">
+                            Author, E. F. (YYYY). Title of web page.
+                            Retrieved from <a href="#">https://example.com</a>
+                        </li>
+                        <li id="ref-3">
+                            Author, G. H. (YYYY). <em>Conference paper title</em>.
+                            In <em>Proceedings of the Conference</em> (pp. 000–000). City: Publisher.
+                        </li>
+                    </ol>
+                </div>
+
+            </div><!-- /.post-body -->
+
+            <!-- ── AUTHOR INFO ──────────────────────────────────────────── -->
             <div class="author-info">
                 <h4><i class="fas fa-user-circle"></i> About the Author</h4>
-                <p>Dr. Jane Smith is a mathematician specializing in complex analysis and number theory. She teaches at
-                    the University of Mathematics and enjoys making abstract concepts accessible to broader audiences.
+                <p>
+                    Johan Montesinos is an electrical engineer and project manager with an interest in
+                    mathematics, physics, and computer science. He writes about ideas at the
+                    intersection of rigour and intuition.
                 </p>
             </div>
 
-            <!-- Post Footer -->
+            <!-- ── POST FOOTER ──────────────────────────────────────────── -->
             <footer class="post-footer">
                 <a href="../../index.html" class="btn btn-outline-secondary">
                     <i class="fas fa-arrow-left"></i> Back to Home
@@ -398,20 +615,55 @@
                     <i class="fas fa-share-alt"></i> Share
                 </a>
             </footer>
+
+            <!-- ====================================================
+                 16. COMMENTS — Giscus (GitHub Discussions)
+                 ─────────────────────────────────────────────────────
+                 These values are the same for every post.
+                 Replace REPLACE_WITH_REPO_ID and REPLACE_WITH_CATEGORY_ID
+                 once — then copy this block unchanged into every new post.
+                 See SETUP_GUIDE.md for the one-time setup steps.
+                 ==================================================== -->
+            <section class="comments-section">
+                <h2><i class="far fa-comments"></i> Comments</h2>
+
+                <script src="https://giscus.app/client.js"
+                    data-repo="JohanMontesinos/johanmontesinos.github.io"
+                    data-repo-id="REPLACE_WITH_REPO_ID"
+                    data-category="General"
+                    data-category-id="REPLACE_WITH_CATEGORY_ID"
+                    data-mapping="pathname"
+                    data-strict="0"
+                    data-reactions-enabled="1"
+                    data-emit-metadata="0"
+                    data-input-position="bottom"
+                    data-theme="light"
+                    data-lang="en"
+                    crossorigin="anonymous"
+                    async>
+                </script>
+            </section>
+
         </article>
     </main>
 
-    <!-- Footer -->
+    <!-- SITE FOOTER  (identical to index.html — do not modify) -->
     <footer>
         <div class="container">
             <div class="row">
                 <div class="col-md-6">
-                    <p class="mb-0">&copy; 2024 JoHaN's Blog. All rights reserved.</p>
+                    <p class="mb-0">&copy; 2026 JoHaN's Blog. All rights reserved.</p>
                 </div>
                 <div class="col-md-6 text-md-end">
-                    <a href="https://github.com/JohanMontesinos/" class="text-decoration-none me-3"><i class="fab fa-github"></i> GitHub</a>
-                    <a href="https://x.com/johanmontesinos" class="text-decoration-none me-3"><i class="fab fa-twitter"></i> X</a>
-                    <a href="johan.montesinos@outlook.com" class="text-decoration-none"><i class="fas fa-envelope"></i> Email</a>
+                    <a href="https://github.com/JohanMontesinos/" class="text-decoration-none me-3">
+                        <i class="fab fa-github"></i> GitHub
+                    </a>
+                    <a href="https://x.com/johanmontesinos" class="text-decoration-none me-3">
+                        <i class="fab fa-twitter"></i> X
+                    </a>
+                    <a href="mailto:johan.montesinos@outlook.com" class="text-decoration-none">
+                        <i class="fas fa-envelope"></i> Email
+                    </a>
                 </div>
             </div>
         </div>
@@ -419,6 +671,11 @@
 
     <!-- Bootstrap JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
-</body>
 
+    <!-- GoatCounter Analytics — privacy-friendly, no cookie banner needed -->
+    <!-- Replace YOUR_SITE_CODE with your GoatCounter site code            -->
+    <!-- See SETUP_GUIDE.md for instructions                               -->
+    <script data-goatcounter="https://YOUR_SITE_CODE.goatcounter.com/count"
+            async src="//gc.zgo.at/count.js"></script>
+</body>
 </html>

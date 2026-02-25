@@ -350,7 +350,7 @@
                     February 23, 2026
                     <span class="mx-2">•</span>
                     <i class="far fa-clock"></i>
-                    15 min read
+                    18 min read
                 </div>
                 <p class="post-subtitle">
                     A complete GitOps pipeline — MicroK8s, Flask, PostgreSQL, Helm, ArgoCD, Gitea,
@@ -374,13 +374,6 @@
                     PostgreSQL, deployed via Helm, orchestrated by ArgoCD watching a self-hosted Gitea
                     repository, and continuously delivered by a GitHub Actions self-hosted runner — all
                     on two low-spec servers and a laptop.
-                </p>
-                
-                <p>
-                </a>
-                <a href="https://github.com/JohanMontesinos/microk8s-devops-demo">
-                    <i class="fab fa-github"></i> View on GitHub.
-                </a>
                 </p>
 
                 <p>
@@ -504,17 +497,17 @@
                 </p>
 
                 <div class="diagram-box">
-<pre><span class="accent">LAPTOP</span>  ──git push ──►  <span class="accent">GitHub</span>                    <span class="accent">Gitea</span> (NODE1:3000)
+<pre><span class="accent">LAPTOP</span>  ──git push──►  <span class="accent">GitHub</span>                    <span class="accent">Gitea</span> (NODE1:3000)
                          │                              ▲
                          │ Actions event                │ git push (HTTP)
                          ▼                              │
-                  NODE1 runner ◄──outbound poll─────────┘
+                  NODE1 runner ◄──outbound poll──────────┘
                          │
                ┌─────────┼──────────────┐
                ▼         ▼              ▼
           docker      docker         helm upgrade
           build       push           webapp chart
-                    NODE1:32000           │
+                    NODE1:32000            │
                          │                ▼
                          └──────► <span class="accent">Kubernetes Cluster</span>
                                     │
@@ -757,7 +750,7 @@ sudo journalctl -u actions.runner.* -f
                 </p>
 
                 <figure class="post-figure">
-                    <img src="DashBoard.png" alt="The redesigned Flask webapp dashboard showing pod name, node name, database status, and health probes in a dark mission-control aesthetic">
+                    <img src="https://via.placeholder.com/760x420?text=Mission+Control+Dashboard+UI" alt="The redesigned Flask webapp dashboard showing pod name, node name, database status, and health probes in a dark mission-control aesthetic">
                     <figcaption>
                         <strong>Figure 1.</strong> The redesigned dashboard UI. Refreshing the page
                         rotates between pod replicas, changing the pod name suffix and occasionally
@@ -880,10 +873,9 @@ sudo journalctl -u actions.runner.* -f
             <div class="author-info">
                 <h4><i class="fas fa-user-circle"></i> About the Author</h4>
                 <p>
-                    Johan Montesinos is a electrical engineer with an interest in DevOps, infrastructure,
+                    Johan Montesinos is a software and DevOps engineer with an interest in infrastructure,
                     distributed systems, and building things that work on hardware you actually own.
-                    He writes about the intersection of hardware, software, and strategic execution,
-                    but my true fascination lies in utilizing innovation as an existential tool for improving people's lives.
+                    He writes about the intersection of theory and the constraints that reveal it.
                 </p>
             </div>
 
@@ -897,39 +889,35 @@ sudo journalctl -u actions.runner.* -f
                 </a>
             </footer>
 
-            <!-- COMMENTS -->
+            <!-- COMMENTS — powered by Giscus (GitHub Discussions) -->
+            <!-- Setup: see SETUP_GUIDE.md in your repo root -->
             <section class="comments-section">
                 <h2><i class="far fa-comments"></i> Comments</h2>
 
-                <div class="comment">
-                    <div class="comment-avatar"><i class="fas fa-user"></i></div>
-                    <div class="comment-body">
-                        <div class="comment-meta">
-                            <strong>Alex K.</strong> · February 23, 2026 at 14:32
-                        </div>
-                        <div class="comment-text">
-                            The three-remote git setup is something I've never seen documented so clearly.
-                            I've been doing it manually with two push commands for years. Going to adopt
-                            this pattern immediately. Thanks for the write-up.
-                        </div>
-                    </div>
-                </div>
-
-                <div class="comment">
-                    <div class="comment-avatar"><i class="fas fa-user"></i></div>
-                    <div class="comment-body">
-                        <div class="comment-meta">
-                            <strong>Maria T.</strong> · February 23, 2026 at 16:05
-                        </div>
-                        <div class="comment-text">
-                            The double NAT section saved me hours. I hit exactly this situation with
-                            a fiber ONT and spent a long time wondering why my port forwards on the
-                            home router were not working. The <code>ip route</code> diagnostic is the key.
-                        </div>
-                    </div>
-                </div>
-                
-                </div>
+                <!--
+                ╔══════════════════════════════════════════════════════════════╗
+                ║  GISCUS SETUP — replace the values below with your own      ║
+                ║  Get your snippet at: https://giscus.app                    ║
+                ║  Step 1: Enable Discussions on johanmontesinos.github.io    ║
+                ║  Step 2: Install Giscus App: github.com/apps/giscus         ║
+                ║  Step 3: Visit giscus.app → fill in your repo → copy script ║
+                ╚══════════════════════════════════════════════════════════════╝
+                -->
+                <script src="https://giscus.app/client.js"
+                    data-repo="JohanMontesinos/johanmontesinos.github.io"
+                    data-repo-id="REPLACE_WITH_REPO_ID"
+                    data-category="General"
+                    data-category-id="REPLACE_WITH_CATEGORY_ID"
+                    data-mapping="pathname"
+                    data-strict="0"
+                    data-reactions-enabled="1"
+                    data-emit-metadata="0"
+                    data-input-position="bottom"
+                    data-theme="light"
+                    data-lang="en"
+                    crossorigin="anonymous"
+                    async>
+                </script>
             </section>
 
         </article>
@@ -959,5 +947,10 @@ sudo journalctl -u actions.runner.* -f
 
     <!-- Bootstrap JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+
+    <!-- GoatCounter Analytics — privacy-friendly, no cookie banner needed -->
+    <!-- Setup: sign up free at goatcounter.com → replace YOUR_SITE_CODE below -->
+    <script data-goatcounter="https://YOUR_SITE_CODE.goatcounter.com/count"
+            async src="//gc.zgo.at/count.js"></script>
 </body>
 </html>

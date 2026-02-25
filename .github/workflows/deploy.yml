@@ -1,0 +1,51 @@
+# GitHub Pages — Auto Deploy Workflow
+#
+# Triggers on every push to main.
+# Deploys the full static site to https://johanmontesinos.github.io
+#
+# One-time setup required:
+#   GitHub → repo Settings → Pages → Source: GitHub Actions
+
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:   # enables manual "Run workflow" button in Actions UI
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Only run one deployment at a time
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    name: Deploy static site
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup GitHub Pages
+        uses: actions/configure-pages@v4
+
+      - name: Upload site files
+        uses: actions/upload-pages-artifact@v3
+        with:
+          # Uploads everything from the repo root
+          # All your HTML files, post/ folder, CSS files included
+          path: '.'
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
