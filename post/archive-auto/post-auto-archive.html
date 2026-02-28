@@ -1,0 +1,1121 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Don't Maintain Your Archive. Automate It. - JoHaN's Blog</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- FontAwesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
+    <!-- MathJax for rendering LaTeX equations -->
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            },
+            svg: { fontCache: 'global' }
+        };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" async></script>
+
+    <!-- Custom CSS Files -->
+    <link href="../../sticky-footer-navbar.css" rel="stylesheet">
+    <link href="../../cmun-serif.css" rel="stylesheet">
+    <link href="../../cmun-serif-slanted.css" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Computer Modern Serif', 'CMU Serif', Georgia, serif;
+            background-color: #fefefe;
+            color: #2d2d2d;
+            line-height: 1.8;
+            font-size: 1.1rem;
+        }
+
+        .navbar {
+            background-color: #fff;
+            border-bottom: 1px solid #ddd;
+            padding: 1rem 0;
+        }
+
+        .navbar-brand {
+            font-size: 1.5rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        main {
+            padding-top: 6rem;
+            padding-bottom: 4rem;
+        }
+
+        .post-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 4rem;
+            border: 1px solid #e0e0e0;
+        }
+
+        .post-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 2px solid #ddd;
+        }
+
+        .post-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            line-height: 1.3;
+            letter-spacing: 0.5px;
+        }
+
+        .post-date {
+            font-size: 0.95rem;
+            color: #888;
+            margin-bottom: 1rem;
+            font-style: italic;
+        }
+
+        .post-date i { margin-right: 0.5rem; }
+
+        .post-subtitle {
+            font-size: 1.3rem;
+            font-style: italic;
+            color: #555;
+            line-height: 1.6;
+            margin-top: 1.5rem;
+        }
+
+        .post-body {
+            text-align: justify;
+            hyphens: auto;
+        }
+
+        .post-body h2 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-top: 2.5rem;
+            margin-bottom: 1.5rem;
+            letter-spacing: 0.3px;
+        }
+
+        .post-body h3 {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            font-style: italic;
+        }
+
+        .post-body p {
+            margin-bottom: 1.5rem;
+            text-indent: 1.5em;
+        }
+
+        .post-body p:first-of-type { text-indent: 0; }
+
+        .post-body p:first-of-type::first-letter {
+            font-size: 3.5rem;
+            font-weight: 700;
+            float: left;
+            line-height: 0.9;
+            margin-right: 0.1em;
+            margin-top: 0.1em;
+        }
+
+        .post-body em { font-style: italic; }
+        .post-body strong { font-weight: 600; }
+
+        .post-body a {
+            color: #0056b3;
+            text-decoration: none;
+            border-bottom: 1px solid transparent;
+            transition: border-bottom 0.2s;
+        }
+
+        .post-body a:hover { border-bottom: 1px solid #0056b3; }
+
+        .post-body ul, .post-body ol {
+            margin-bottom: 1.5rem;
+            padding-left: 2rem;
+        }
+
+        .post-body li { margin-bottom: 0.75rem; }
+
+        .post-body blockquote {
+            margin: 2rem 0;
+            padding: 1rem 2rem;
+            border-left: 4px solid #ddd;
+            background-color: #f9f9f9;
+            font-style: italic;
+            color: #555;
+        }
+
+        .post-body blockquote cite {
+            display: block;
+            margin-top: 0.75rem;
+            font-size: 0.9rem;
+            font-style: normal;
+            color: #888;
+        }
+
+        .citation-ref {
+            vertical-align: super;
+            font-size: 0.75em;
+            color: #0056b3;
+            text-decoration: none;
+            font-style: normal;
+        }
+
+        .citation-ref:hover { text-decoration: underline; }
+
+        .references {
+            margin-top: 3rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid #ddd;
+        }
+
+        .references h2 { font-size: 1.4rem; margin-bottom: 1rem; }
+
+        .references ol {
+            padding-left: 1.5rem;
+            font-size: 0.95rem;
+            color: #555;
+        }
+
+        .references ol li {
+            margin-bottom: 0.5rem;
+            line-height: 1.6;
+        }
+
+        figure.post-figure {
+            margin: 2.5rem 0;
+            text-align: center;
+        }
+
+        figure.post-figure img {
+            max-width: 100%;
+            border: 1px solid #ddd;
+            display: block;
+            margin: 0 auto;
+        }
+
+        figcaption {
+            margin-top: 0.75rem;
+            font-size: 0.9rem;
+            font-style: italic;
+            color: #666;
+        }
+
+        figcaption strong {
+            font-style: normal;
+            font-weight: 600;
+        }
+
+        .post-body code {
+            font-family: 'Courier New', monospace;
+            background-color: #f5f5f5;
+            padding: 0.2rem 0.4rem;
+            border-radius: 3px;
+            font-size: 0.9em;
+        }
+
+        .post-body pre {
+            background-color: #f5f5f5;
+            padding: 1.5rem;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 2rem 0;
+            border: 1px solid #e8e8e8;
+            font-size: 0.92rem;
+            line-height: 1.6;
+        }
+
+        .post-body pre code {
+            background: none;
+            padding: 0;
+        }
+
+        .code-wrapper {
+            position: relative;
+            margin: 2rem 0;
+        }
+
+        .code-wrapper .code-lang {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.75rem;
+            font-size: 0.75rem;
+            color: #999;
+            font-family: 'Courier New', monospace;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .code-wrapper pre { margin: 0; }
+
+        .callout {
+            margin: 2rem 0;
+            padding: 1.25rem 1.75rem;
+            border-radius: 2px;
+            border-left: 4px solid;
+        }
+
+        .callout-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .callout p {
+            text-indent: 0;
+            margin-bottom: 0;
+            font-size: 0.98rem;
+        }
+
+        .callout.note  { background: #f0f4ff; border-color: #3b72d9; color: #1a3a6e; }
+        .callout.tip   { background: #f0faf4; border-color: #28a745; color: #155724; }
+        .callout.warning { background: #fff8e1; border-color: #f0a500; color: #5a3e00; }
+
+        .post-body table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 2rem 0;
+            font-size: 0.97rem;
+        }
+
+        .post-body th {
+            border-bottom: 2px solid #2d2d2d;
+            padding: 0.5rem 0.75rem;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .post-body td {
+            border-bottom: 1px solid #ddd;
+            padding: 0.5rem 0.75rem;
+        }
+
+        .post-body caption {
+            caption-side: bottom;
+            font-size: 0.85rem;
+            font-style: italic;
+            color: #777;
+            margin-top: 0.5rem;
+            text-align: center;
+        }
+
+        /* Pipeline diagram */
+        .pipeline {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 0;
+            margin: 2.5rem 0;
+            font-size: 0.92rem;
+        }
+
+        .pipeline-step {
+            background: #f0f4ff;
+            border: 1px solid #3b72d9;
+            border-radius: 4px;
+            padding: 0.6rem 1rem;
+            text-align: center;
+            min-width: 120px;
+        }
+
+        .pipeline-step .step-num {
+            font-size: 0.75rem;
+            color: #3b72d9;
+            font-weight: 700;
+            display: block;
+            margin-bottom: 0.2rem;
+        }
+
+        .pipeline-arrow {
+            color: #3b72d9;
+            font-size: 1.3rem;
+            padding: 0 0.4rem;
+        }
+
+        .comments-section {
+            margin-top: 4rem;
+            padding-top: 2rem;
+            border-top: 2px solid #ddd;
+        }
+
+        .comments-section h2 { font-size: 1.6rem; margin-bottom: 2rem; }
+
+        .post-footer {
+            margin-top: 4rem;
+            padding-top: 2rem;
+            border-top: 2px solid #ddd;
+            text-align: center;
+        }
+
+        .post-footer .btn { margin: 0 0.5rem; }
+
+        .author-info {
+            margin-top: 3rem;
+            padding: 2rem;
+            background-color: #f9f9f9;
+            border-left: 4px solid #0056b3;
+        }
+
+        .author-info h4 { margin-bottom: 0.5rem; font-weight: 600; }
+        .author-info p  { text-indent: 0; margin-bottom: 0; }
+
+        footer {
+            background-color: #f8f9fa;
+            border-top: 1px solid #e0e0e0;
+            padding: 2rem 0;
+            margin-top: 3rem;
+        }
+
+        @media (max-width: 768px) {
+            .post-container { padding: 2rem 1.5rem; }
+            .post-title { font-size: 2rem; }
+            .post-subtitle { font-size: 1.1rem; }
+            .pipeline { flex-direction: column; }
+            .pipeline-arrow { transform: rotate(90deg); }
+        }
+    </style>
+</head>
+
+<body class="d-flex flex-column min-vh-100">
+
+    <!-- NAVIGATION -->
+    <nav class="navbar navbar-expand-lg fixed-top navbar-light">
+        <div class="container">
+            <a class="navbar-brand" href="../../index.html">
+                <i class="fas fa-feather-alt"></i> JoHaN's Blog
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="../../index.html">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="../../about.html">About</a></li>
+                    <li class="nav-item"><a class="nav-link" href="../../archive.html">Archive</a></li>
+                    <li class="nav-item"><a class="nav-link" href="../../contact.html">Contact</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- MAIN CONTENT -->
+    <main class="flex-fill">
+        <article class="post-container">
+
+            <!-- POST HEADER -->
+            <header class="post-header">
+                <h1 class="post-title">Don't Maintain Your Archive. Automate It.</h1>
+
+                <div class="post-date">
+                    <i class="far fa-calendar"></i>
+                    February 28, 2026
+                    <span class="mx-2">•</span>
+                    <i class="far fa-clock"></i>
+                    12 min read
+                </div>
+
+                <p class="post-subtitle">
+                    Any task you do more than twice by hand is a task you've already decided
+                    to do wrong. Here's how to make your blog archive update itself.
+                </p>
+            </header>
+
+            <!-- POST BODY -->
+            <div class="post-body">
+
+                <!-- ── 1. INTRODUCTION ─────────────────────────────────── -->
+                <p>
+                    The most dangerous kind of work is the kind that feels productive but isn't.
+                    Manually updating an archive page is a perfect example. You publish a post,
+                    you open <code>archive.html</code>, you copy a few lines of HTML, change the
+                    date, save the file, push again. Takes maybe two minutes. Totally fine — until
+                    the one time you're in a hurry and skip it, and your archive silently lies to
+                    your readers for the next six months.
+                </p>
+
+                <p>
+                    The right response to that failure mode isn't to be more disciplined. It's to
+                    make the failure impossible. That's what this post is about. We're going to
+                    make <code>archive.html</code> a derived artifact — something generated
+                    automatically from the posts you've already written — so it literally cannot
+                    fall out of sync. The whole thing runs on a free GitHub feature, takes about
+                    an hour to set up, and then you never think about it again.
+                </p>
+
+                <div class="callout note">
+                    <div class="callout-title"><i class="fas fa-info-circle"></i> Who is this for?</div>
+                    <p>You need to know basic HTML and have used Git at least once. That's it.
+                    I'll explain every GitHub Actions concept from scratch, and the Python script
+                    is short enough that you don't need Python experience — just the ability to
+                    read code and follow what it's doing.</p>
+                </div>
+
+                <!-- ── 2. THE PROBLEM ──────────────────────────────────── -->
+                <h2>The Laziness Principle</h2>
+
+                <p>
+                    Good programmers are lazy in a specific way. They hate doing the same thing
+                    twice. Not because they're unmotivated — usually the opposite — but because
+                    repetition is a signal. If you're doing something manually over and over,
+                    you've spotted a pattern, and patterns are exactly what computers are for.
+                </p>
+
+                <p>
+                    Look at what a post card in <code>index.html</code> already contains: the
+                    title, the link, the date, the excerpt. Everything the archive page needs.
+                    It's all right there. The archive isn't missing information — it's just
+                    a different view of information that already exists. So why are we
+                    duplicating it by hand?
+                </p>
+
+                <p>
+                    The answer, of course, is that we shouldn't be. <strong><code>index.html</code>
+                    should be the single source of truth.</strong> The archive is a derived output —
+                    generated from the posts, not maintained alongside them. Once you see it that
+                    way, the solution is obvious: write a script that reads one file and generates
+                    the other, and run it automatically on every push.
+                </p>
+
+                <figure class="post-figure">
+                    <img src="https://images.unsplash.com/photo-1618401471353-b98afee0b2eb?w=760&h=380&fit=crop"
+                         alt="Code on a screen representing the pipeline">
+                    <figcaption>
+                        <strong>Figure 1.</strong> The deployment pipeline: a single push triggers
+                        archive generation and deployment as one atomic operation.
+                    </figcaption>
+                </figure>
+
+                <!-- ── 3. THE ARCHITECTURE ─────────────────────────────── -->
+                <h2>How It Actually Works</h2>
+
+                <p>
+                    Before writing a single line of code, get the shape of the solution clear
+                    in your head. There are three actors: you, GitHub Actions, and GitHub Pages.
+                    They each do exactly one thing.
+                </p>
+
+                <p>
+                    You write posts. GitHub Actions runs a Python script that regenerates the
+                    archive. GitHub Pages serves the result. That's it. What's nice about this
+                    division is that none of them need to know much about the others.
+                </p>
+
+                <!-- Visual pipeline diagram -->
+                <div class="pipeline">
+                    <div class="pipeline-step">
+                        <span class="step-num">YOU</span>
+                        Add post card<br>to index.html<br>→ git push
+                    </div>
+                    <div class="pipeline-arrow">→</div>
+                    <div class="pipeline-step">
+                        <span class="step-num">STEP 1</span>
+                        Checkout<br>repository
+                    </div>
+                    <div class="pipeline-arrow">→</div>
+                    <div class="pipeline-step">
+                        <span class="step-num">STEP 2</span>
+                        Run<br>generate_archive.py
+                    </div>
+                    <div class="pipeline-arrow">→</div>
+                    <div class="pipeline-step">
+                        <span class="step-num">STEP 3</span>
+                        Upload<br>site artifact
+                    </div>
+                    <div class="pipeline-arrow">→</div>
+                    <div class="pipeline-step">
+                        <span class="step-num">STEP 4</span>
+                        Deploy to<br>GitHub Pages
+                    </div>
+                </div>
+
+                <p>
+                    The thing worth pausing on is Step 2. The script rewrites
+                    <code>archive.html</code> on the runner's temporary filesystem — the
+                    throwaway virtual machine GitHub spins up to run your workflow. That modified
+                    file gets packaged and shipped to GitHub Pages in Steps 3 and 4.
+                    <strong>Your actual repository is never committed to.</strong> No bot commits,
+                    no extra git history, no clever hacks to prevent infinite loops. The runner
+                    does its work and disappears.
+                </p>
+
+                <div class="callout tip">
+                    <div class="callout-title"><i class="fas fa-lightbulb"></i> The right mental model</div>
+                    <p>The runner is a disposable photocopier. It makes a copy of your repo,
+                    edits that copy, and faxes the result to GitHub Pages. The original in
+                    your repo is untouched. Then the photocopier is shredded. This is the key
+                    insight — you're not fighting git, you're just using the filesystem.</p>
+                </div>
+
+                <!-- ── 4. THE THREE FILES ──────────────────────────────── -->
+                <h2>Three Files. That's the Whole System.</h2>
+
+                <p>
+                    I like solutions that fit in your head. This one has three pieces.
+                    Once you understand what each one does, you'll never need to look up
+                    how any of it works — you'll just know.
+                </p>
+
+                <table>
+                    <caption>Table 1. The three files and what each one is responsible for.</caption>
+                    <thead>
+                        <tr>
+                            <th>File</th>
+                            <th>Location in repo</th>
+                            <th>Role</th>
+                            <th>Do you edit it?</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>deploy.yml</code></td>
+                            <td><code>.github/workflows/</code></td>
+                            <td>Tells GitHub Actions what to do and when</td>
+                            <td>Rarely — only to add new steps</td>
+                        </tr>
+                        <tr>
+                            <td><code>generate_archive.py</code></td>
+                            <td><code>scripts/</code></td>
+                            <td>Parses index.html and regenerates archive.html</td>
+                            <td>No — it is self-contained</td>
+                        </tr>
+                        <tr>
+                            <td><code>archive.html</code></td>
+                            <td>repo root</td>
+                            <td>The output — overwritten on every deploy</td>
+                            <td>Never — it is auto-generated</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <!-- ── 5. THE WORKFLOW FILE ───────────────────────────── -->
+                <h2>File 1: The Workflow — <code>deploy.yml</code></h2>
+
+                <p>
+                    A GitHub Actions workflow is a YAML file that tells GitHub what to run,
+                    on which machine, and in what order. YAML is just a configuration format —
+                    indentation matters (think Python), and colons separate keys from values.
+                    Don't be intimidated by it. Read it like a recipe.
+                </p>
+
+                <p>
+                    Here's the complete workflow. I've commented every non-obvious line,
+                    because the worst thing about YAML configs is that they look like
+                    boilerplate until suddenly one missing line breaks everything.
+                </p>
+
+                <div class="code-wrapper">
+                    <span class="code-lang">yaml</span>
+                    <pre><code># The name shown in the GitHub Actions tab
+name: Build & Deploy to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main        # Run this workflow whenever you push to main
+  workflow_dispatch: # Also lets you click "Run workflow" manually
+                     # in the GitHub → Actions tab
+
+# Three permissions required by GitHub Pages deployments.
+# Remove any of these and the deploy step will fail.
+permissions:
+  contents: read    # Read repo files
+  pages: write      # Publish to GitHub Pages
+  id-token: write   # Authenticate the deployment securely (OIDC)
+
+# If you push twice quickly, cancel the older run.
+# Prevents two deploys racing each other.
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest  # Spins up a fresh Ubuntu virtual machine
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}  # Shows live URL in summary
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        # Downloads your entire repo into the runner's filesystem.
+        # After this step, all your files exist at /home/runner/work/
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+        # Installs Python. The script uses only stdlib, so no pip install needed.
+
+      - name: Generate archive.html
+        run: python scripts/generate_archive.py
+        # Runs the parser. Rewrites archive.html on the runner.
+        # Your repo on GitHub is NOT changed.
+
+      - name: Setup GitHub Pages
+        uses: actions/configure-pages@v4
+        # Required boilerplate — prepares the Pages deployment context.
+
+      - name: Upload site files
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: '.'
+        # Zips up everything from the repo root (including the freshly
+        # generated archive.html) and registers it as a Pages artifact.
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+        # Publishes the artifact. Your site is live.</code></pre>
+                </div>
+
+                <div class="callout warning">
+                    <div class="callout-title"><i class="fas fa-exclamation-triangle"></i> One thing you have to do manually</div>
+                    <p>Go to your repo on GitHub → <strong>Settings → Pages → Source</strong>
+                    and select <strong>GitHub Actions</strong>. You only do this once.
+                    Skip it and the deploy step fails with a cryptic permissions error
+                    that will send you down a frustrating rabbit hole.</p>
+                </div>
+
+                <!-- ── 6. THE PYTHON SCRIPT ───────────────────────────── -->
+                <h2>File 2: The Engine — <code>generate_archive.py</code></h2>
+
+                <p>
+                    This is the interesting part. The script has one job: read
+                    <code>index.html</code>, pull the data out of every post card, sort by
+                    date, group by year and month, and write a complete
+                    <code>archive.html</code>. It uses only Python's standard library —
+                    nothing to install, nothing to configure.
+                </p>
+
+                <h3>What HTMLParser actually does</h3>
+
+                <p>
+                    Python's built-in <code>HTMLParser</code> reads HTML top-to-bottom and
+                    fires callback methods as it goes: <code>handle_starttag</code> when it
+                    hits an opening tag, <code>handle_endtag</code> on a closing tag, and
+                    <code>handle_data</code> when it encounters plain text. We use simple
+                    boolean flags to remember where we are in the document. It sounds fancier
+                    than it is — it's really just a state machine.
+                </p>
+
+                <div class="code-wrapper">
+                    <span class="code-lang">python</span>
+                    <pre><code>from html.parser import HTMLParser
+import re
+
+class PostCardParser(HTMLParser):
+    def __init__(self):
+        super().__init__()
+        self.posts = []          # Final list of parsed posts
+        self._in_article  = False
+        self._in_title_a  = False
+        self._in_excerpt  = False
+        self._in_meta     = False
+        self._current     = {}   # Buffer for the post being parsed
+        self._meta_text   = ""
+
+    def handle_starttag(self, tag, attrs):
+        attrs = dict(attrs)
+
+        # Detect the opening of a new post card:
+        #   <article class="post-card">
+        if tag == "article" and "post-card" in attrs.get("class", ""):
+            self._in_article = True
+            self._current = {
+                "title": "", "href": "", "excerpt": "",
+                "date_str": "", "read_time": ""
+            }
+
+        if not self._in_article:
+            return  # Ignore everything outside a post card
+
+        # Detect the title heading:
+        #   <h2 class="post-card-title">
+        if tag in ("h2","h3","h4") and "post-card-title" in attrs.get("class",""):
+            self._current["_title_open"] = True
+
+        # Detect the link inside the title heading:
+        #   <a href="./post/foo/bar.html">
+        if tag == "a" and self._current.get("_title_open") and not self._current["href"]:
+            self._in_title_a = True
+            self._current["href"] = attrs.get("href", "")  # Grab the URL
+
+        # Detect the excerpt paragraph:
+        #   <p class="post-card-text">
+        if tag == "p" and "post-card-text" in attrs.get("class",""):
+            self._in_excerpt = True
+
+        # Detect the metadata div (holds date + read time):
+        #   <div class="post-meta">
+        if tag == "div" and "post-meta" in attrs.get("class",""):
+            self._in_meta   = True
+            self._meta_text = ""
+
+    def handle_data(self, data):
+        # Accumulate text while inside relevant elements.
+        # This fires for every piece of plain text, including
+        # whitespace — the .strip() calls later clean that up.
+        if self._in_title_a: self._current["title"]  += data
+        if self._in_excerpt: self._current["excerpt"] += data
+        if self._in_meta:    self._meta_text           += data
+
+    def handle_endtag(self, tag):
+        if tag == "a"   and self._in_title_a: self._in_title_a = False
+        if tag == "p"   and self._in_excerpt: self._in_excerpt  = False
+
+        # When the meta div closes, parse the accumulated text
+        # to extract date ("November 28, 2025") and time ("8 min read")
+        if tag == "div" and self._in_meta:
+            self._in_meta = False
+            m_date = re.search(r'([A-Z][a-z]+ \d{1,2}, \d{4})', self._meta_text)
+            m_time = re.search(r'(\d+ min read)',                 self._meta_text)
+            if m_date: self._current["date_str"]  = m_date.group(1)
+            if m_time: self._current["read_time"] = m_time.group(1)
+
+        # When the article closes, save the completed post dict
+        if tag == "article" and self._in_article:
+            self._in_article = False
+            self._current.pop("_title_open", None)
+            if self._current.get("title") or self._current.get("href"):
+                self.posts.append(dict(self._current))</code></pre>
+                </div>
+
+                <h3>Sorting and grouping</h3>
+
+                <p>
+                    Once the parser has a list of raw post dicts, two things need to happen:
+                    sort them (newest first) and group them (by year, then month). The sorting
+                    is why we convert the date string into an actual <code>datetime</code>
+                    object — you can't sort "November 28, 2025" and "March 10, 2026"
+                    alphabetically and get the right answer. But you can sort two
+                    <code>datetime</code> objects and always get the right answer.
+                </p>
+
+                <div class="code-wrapper">
+                    <span class="code-lang">python</span>
+                    <pre><code">from pathlib import Path
+from datetime import datetime
+from collections import defaultdict
+
+ROOT         = Path(__file__).parent.parent  # Repo root
+INDEX_FILE   = ROOT / "index.html"
+ARCHIVE_FILE = ROOT / "archive.html"
+
+def parse_posts(index_path):
+    html   = index_path.read_text(encoding="utf-8")
+    parser = PostCardParser()
+    parser.feed(html)
+
+    posts = []
+    for p in parser.posts:
+        date_obj = None
+        if p["date_str"]:
+            try:
+                # "November 28, 2025"  →  datetime(2025, 11, 28)
+                date_obj = datetime.strptime(p["date_str"].strip(), "%B %d, %Y")
+            except ValueError:
+                pass  # Malformed date — post still included, sorts last
+
+        posts.append({**p, "date_obj": date_obj})
+
+    # Sort newest → oldest
+    posts.sort(key=lambda p: p["date_obj"] or datetime.min, reverse=True)
+    return posts
+
+
+def group_posts(posts):
+    # Produces:  { 2026: { 2: [post, …], 1: [post] }, 2025: { 12: [post] } }
+    grouped = defaultdict(lambda: defaultdict(list))
+    for p in posts:
+        year  = p["date_obj"].year  if p["date_obj"] else "Unknown"
+        month = p["date_obj"].month if p["date_obj"] else 0
+        grouped[year][month].append(p)
+    return grouped</code></pre>
+                </div>
+
+                <div class="callout tip">
+                    <div class="callout-title"><i class="fas fa-lightbulb"></i> Why <code>defaultdict</code>?</div>
+                    <p>A regular Python dict throws a <code>KeyError</code> if you access a key
+                    that doesn't exist yet. A <code>defaultdict</code> just creates it with a
+                    sensible default on first access. It's a small thing, but it lets you write
+                    <code>grouped[year][month].append(p)</code> without three lines of "does this
+                    key exist yet?" boilerplate above it. Less noise, same meaning.</p>
+                </div>
+
+                <!-- ── 7. THE DATA FLOW ───────────────────────────────── -->
+                <h2>Following One Post All the Way Through</h2>
+
+                <p>
+                    Abstract explanations only get you so far. Let's trace one concrete post
+                    through the whole system so you can see exactly what happens at each step.
+                    Say you add this to <code>index.html</code>:
+                </p>
+
+                <div class="code-wrapper">
+                    <span class="code-lang">html</span>
+                    <pre><code>&lt;article class="post-card"&gt;
+    &lt;img src="https://images.unsplash.com/photo-xxx?w=800" alt="AI"&gt;
+    &lt;div class="post-card-body"&gt;
+        &lt;h2 class="post-card-title"&gt;
+            &lt;a href="./post/intro-to-transformers/post.html"&gt;
+                An Introduction to Transformer Networks
+            &lt;/a&gt;
+        &lt;/h2&gt;
+        &lt;p class="post-card-text"&gt;
+            How the attention mechanism replaced recurrence in modern NLP.
+        &lt;/p&gt;
+        &lt;div class="post-meta"&gt;
+            &lt;i class="far fa-calendar"&gt;&lt;/i&gt; March 10, 2026
+            &lt;span class="ms-3"&gt;&lt;i class="far fa-clock"&gt;&lt;/i&gt; 9 min read&lt;/span&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/article&gt;</code></pre>
+                </div>
+
+                <p>
+                    The parser chews through that HTML and spits out this dict:
+                </p>
+
+                <div class="code-wrapper">
+                    <span class="code-lang">python</span>
+                    <pre><code"># What the parser produces for the article above:
+{
+    "title":     "An Introduction to Transformer Networks",
+    "href":      "./post/intro-to-transformers/post.html",
+    "excerpt":   "How the attention mechanism replaced recurrence in modern NLP.",
+    "date_str":  "March 10, 2026",
+    "date_obj":  datetime(2026, 3, 10),   # Added by parse_posts()
+    "read_time": "9 min read"
+}</code></pre>
+                </div>
+
+                <p>
+                    Because <code>datetime(2026, 3, 10)</code> is newer than everything else,
+                    it sorts to position zero. It lands in <code>grouped[2026][3]</code> — year
+                    2026, month 3. The render function picks that up, wraps it in the right
+                    HTML, and drops it under a "March" heading inside the 2026 year section.
+                    Start to finish: under two seconds.
+                </p>
+
+                <!-- ── 8. WHAT CAN GO WRONG ───────────────────────────── -->
+                <h2>When It Breaks</h2>
+
+                <p>
+                    It will break at some point. Usually it's something trivially fixable,
+                    but the error messages from GitHub Actions aren't always helpful.
+                    Here are the five failure modes I've hit, and what each one actually means.
+                </p>
+
+                <table>
+                    <caption>Table 2. Common issues and their solutions.</caption>
+                    <thead>
+                        <tr>
+                            <th>Symptom</th>
+                            <th>Likely cause</th>
+                            <th>Fix</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Post appears with "Date unknown" in the archive</td>
+                            <td>Date format doesn't match <code>Month DD, YYYY</code></td>
+                            <td>Use full month name: <code>March 10, 2026</code> not <code>03/10/26</code></td>
+                        </tr>
+                        <tr>
+                            <td>Workflow fails: <em>"index.html not found"</em></td>
+                            <td>Script called from wrong directory</td>
+                            <td>Ensure <code>deploy.yml</code> runs <code>python scripts/generate_archive.py</code></td>
+                        </tr>
+                        <tr>
+                            <td>Deploy fails with 403 permission error</td>
+                            <td>Pages source not set to GitHub Actions</td>
+                            <td>Settings → Pages → Source → GitHub Actions</td>
+                        </tr>
+                        <tr>
+                            <td>Archive not updated after push</td>
+                            <td>Workflow didn't trigger (wrong branch)</td>
+                            <td>Confirm you pushed to <code>main</code>, not another branch</td>
+                        </tr>
+                        <tr>
+                            <td>Post missing from archive</td>
+                            <td>Article element missing <code>class="post-card"</code></td>
+                            <td>Ensure every article has exactly <code>class="post-card"</code></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <!-- ── 9. EXTENDING THE SYSTEM ───────────────────────── -->
+                <h2>Where to Take It Next</h2>
+
+                <p>
+                    The system works as-is, but the nice thing about having all your post data
+                    flowing through one Python script is that it's trivial to generate other
+                    things from it. Two ideas worth pursuing:
+                </p>
+
+                <h3>Category filtering</h3>
+                <p>
+                    Add a <code>&lt;span class="post-category"&gt;Mathematics&lt;/span&gt;</code>
+                    to each post card. The parser extension is maybe ten lines — same pattern
+                    as the excerpt extraction. Now you can render a colored badge per post in
+                    the archive, and a filter dropdown that narrows by topic. Readers will
+                    actually use this.
+                </p>
+
+                <h3>An RSS feed</h3>
+                <p>
+                    By the time the script finishes grouping posts, it has everything needed
+                    to write <code>feed.xml</code> too. Roughly thirty extra lines of Python,
+                    zero changes to the workflow. RSS feels retro but it has real users —
+                    a lot of serious readers still prefer it over algorithmic feeds.
+                </p>
+
+                <!-- ── 10. CONCLUSION ─────────────────────────────────── -->
+                <h2>The Real Point</h2>
+
+                <p>
+                    The finished system is three files and maybe a hundred lines of code total.
+                    You write a post, push it, and the archive updates. You stop thinking about
+                    the archive entirely. That's the goal.
+                </p>
+
+                <p>
+                    But I think there's a broader lesson here worth naming. The instinct for
+                    most people when they encounter a small recurring task is to just do it.
+                    It's only two minutes. That's a reasonable instinct for things that genuinely
+                    can't be automated. For things that can be, it's a trap. The two minutes adds
+                    up, but worse, the cognitive overhead of remembering to do it adds up more.
+                    Every manual step is a thing you have to think about. Automation isn't just
+                    about saving time — it's about <strong>reducing the surface area of things
+                    that can go wrong</strong>.
+                </p>
+
+                <p>
+                    The pipeline here is small enough to understand completely. And that matters.
+                    Automation you understand is robust. Automation you've cargo-culted from
+                    Stack Overflow is a liability. When something breaks at 11pm before a
+                    deadline, you want to be able to read the workflow, spot the problem in
+                    thirty seconds, and fix it. Build things you can hold in your head.
+                </p>
+
+                <!-- REFERENCES -->
+                <div class="references">
+                    <h2>References</h2>
+                    <ol>
+                        <li id="ref-1">
+                            GitHub, Inc. (2024). <em>GitHub Actions Documentation — Understanding
+                            GitHub Actions</em>. Retrieved from
+                            <a href="https://docs.github.com/en/actions/learn-github-actions/understanding-github-actions"
+                               target="_blank">docs.github.com</a>
+                        </li>
+                        <li id="ref-2">
+                            Python Software Foundation. (2024). <em>html.parser — Simple HTML and
+                            XHTML parser</em>. Python 3.12 Documentation. Retrieved from
+                            <a href="https://docs.python.org/3/library/html.parser.html"
+                               target="_blank">docs.python.org</a>
+                        </li>
+                        <li id="ref-3">
+                            GitHub, Inc. (2024). <em>Deploying to GitHub Pages using a workflow</em>.
+                            GitHub Actions Documentation. Retrieved from
+                            <a href="https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site"
+                               target="_blank">docs.github.com</a>
+                        </li>
+                    </ol>
+                </div>
+
+            </div><!-- /.post-body -->
+
+            <!-- AUTHOR INFO -->
+            <div class="author-info">
+                <h4><i class="fas fa-user-circle"></i> About the Author</h4>
+                <p>
+                    Johan Montesinos is an electrical engineer and project manager with an interest in
+                    mathematics, physics, and computer science. He writes about ideas at the
+                    intersection of rigour and intuition.
+                </p>
+            </div>
+
+            <!-- POST FOOTER -->
+            <footer class="post-footer">
+                <a href="../../index.html" class="btn btn-outline-secondary">
+                    <i class="fas fa-arrow-left"></i> Back to Home
+                </a>
+                <a href="#" class="btn btn-outline-primary">
+                    <i class="fas fa-share-alt"></i> Share
+                </a>
+            </footer>
+
+            <!-- COMMENTS — Giscus -->
+            <section class="comments-section">
+                <h2><i class="far fa-comments"></i> Comments</h2>
+                <script src="https://giscus.app/client.js"
+                    data-repo="JohanMontesinos/johanmontesinos.github.io"
+                    data-repo-id="R_kgDOMDZSDQ"
+                    data-category="General"
+                    data-category-id="DIC_kwDOMDZSDc4C3MPt"
+                    data-mapping="pathname"
+                    data-strict="0"
+                    data-reactions-enabled="1"
+                    data-emit-metadata="0"
+                    data-input-position="top"
+                    data-theme="light"
+                    data-lang="en"
+                    data-loading="lazy"
+                    crossorigin="anonymous"
+                    async>
+                </script>
+            </section>
+
+        </article>
+    </main>
+
+    <!-- SITE FOOTER -->
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <p class="mb-0">&copy; 2026 JoHaN's Blog. All rights reserved.</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <a href="https://github.com/JohanMontesinos/" class="text-decoration-none me-3">
+                        <i class="fab fa-github"></i> GitHub
+                    </a>
+                    <a href="https://x.com/johanmontesinos" class="text-decoration-none me-3">
+                        <i class="fab fa-twitter"></i> X
+                    </a>
+                    <a href="mailto:johan.montesinos@outlook.com" class="text-decoration-none">
+                        <i class="fas fa-envelope"></i> Email
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+
+    <!-- GoatCounter Analytics -->
+    <script data-goatcounter="https://johanmontesinos.goatcounter.com/count"
+            async src="//gc.zgo.at/count.js"></script>
+
+</body>
+</html>
