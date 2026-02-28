@@ -1,51 +1,85 @@
-# GitHub Pages — Auto Deploy Workflow
+# ============================================================
+# deploy.yml — Build & Deploy JoHaN's Blog to GitHub Pages
+# ============================================================
 #
-# Triggers on every push to main.
-# Deploys the full static site to https://johanmontesinos.github.io
+# What this does in order, every time you push to main:
+#   1. Checks out your repo
+#   2. Runs generate_archive.py → rewrites archive.html in the
+#      runner's workspace (NO commit back to the repo needed)
+#   3. Uploads the full site (including the fresh archive.html)
+#   4. Deploys to https://johanmontesinos.github.io
+#
+# How to add a new post:
+#   Just add an <article class="post-card"> to index.html,
+#   push to main, and everything updates automatically.
 #
 # One-time setup required:
 #   GitHub → repo Settings → Pages → Source: GitHub Actions
+# ============================================================
 
-name: Deploy to GitHub Pages
+name: Build & Deploy to GitHub Pages
 
 on:
   push:
     branches:
-      - main
-  workflow_dispatch:   # enables manual "Run workflow" button in Actions UI
+      - main          # runs on every push to main
+  workflow_dispatch:  # also allows manual trigger from the Actions tab
 
+# Permissions needed by the GitHub Pages deploy action
 permissions:
-  contents: read
-  pages: write
-  id-token: write
+  contents: read      # read the repo files
+  pages: write        # publish to GitHub Pages
+  id-token: write     # authenticate the deployment securely
 
-# Only run one deployment at a time
+# Only one deployment runs at a time.
+# If you push twice quickly, the first deploy is cancelled in favour of the latest.
 concurrency:
   group: pages
   cancel-in-progress: true
 
 jobs:
-  deploy:
-    name: Deploy static site
+  build-and-deploy:
+    name: Build archive & Deploy site
     runs-on: ubuntu-latest
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
 
     steps:
+
+      # ── Step 1 ──────────────────────────────────────────────
+      # Download your repo files onto the runner machine
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      # ── Step 2 ──────────────────────────────────────────────
+      # Run the archive generator.
+      # This rewrites archive.html directly in the runner's
+      # working copy — no git commit required.
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Generate archive.html
+        run: python scripts/generate_archive.py
+
+      # ── Step 3 ──────────────────────────────────────────────
+      # Configure GitHub Pages (sets up the artifact format)
       - name: Setup GitHub Pages
         uses: actions/configure-pages@v4
 
+      # ── Step 4 ──────────────────────────────────────────────
+      # Package everything from the repo root into a Pages artifact.
+      # This includes index.html, the freshly generated archive.html,
+      # all post/ folders, CSS files, and anything else at root level.
       - name: Upload site files
         uses: actions/upload-pages-artifact@v3
         with:
-          # Uploads everything from the repo root
-          # All your HTML files, post/ folder, CSS files included
           path: '.'
 
+      # ── Step 5 ──────────────────────────────────────────────
+      # Publish the artifact to GitHub Pages
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
