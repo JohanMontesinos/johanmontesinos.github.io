@@ -737,7 +737,7 @@ class PostCardParser(HTMLParser):
         attrs = dict(attrs)
 
         # Detect the opening of a new post card:
-        #   <article class="post-card">
+        #   &lt;article class="post-card"&gt;
         if tag == "article" and "post-card" in attrs.get("class", ""):
             self._in_article = True
             self._current = {
@@ -749,23 +749,23 @@ class PostCardParser(HTMLParser):
             return  # Ignore everything outside a post card
 
         # Detect the title heading:
-        #   <h2 class="post-card-title">
+        #   &lt;h2 class="post-card-title"&gt;
         if tag in ("h2","h3","h4") and "post-card-title" in attrs.get("class",""):
             self._current["_title_open"] = True
 
         # Detect the link inside the title heading:
-        #   <a href="./post/foo/bar.html">
+        #   &lt;a href="./post/foo/bar.html"&gt;
         if tag == "a" and self._current.get("_title_open") and not self._current["href"]:
             self._in_title_a = True
             self._current["href"] = attrs.get("href", "")  # Grab the URL
 
         # Detect the excerpt paragraph:
-        #   <p class="post-card-text">
+        #   &lt;p class="post-card-text"&gt;
         if tag == "p" and "post-card-text" in attrs.get("class",""):
             self._in_excerpt = True
 
         # Detect the metadata div (holds date + read time):
-        #   <div class="post-meta">
+        #   &lt;div class="post-meta"&gt;
         if tag == "div" and "post-meta" in attrs.get("class",""):
             self._in_meta   = True
             self._meta_text = ""
@@ -1102,7 +1102,7 @@ def group_posts(posts):
                     <a href="https://x.com/johanmontesinos" class="text-decoration-none me-3">
                         <i class="fab fa-twitter"></i> X
                     </a>
-                    <a href="mailto:johan.montesinos@outlook.com" class="text-decoration-none">
+                    <a href="/cdn-cgi/l/email-protection#97fdf8fff6f9b9faf8f9e3f2e4fef9f8e4d7f8e2e3fbf8f8fcb9f4f8fa" class="text-decoration-none">
                         <i class="fas fa-envelope"></i> Email
                     </a>
                 </div>
@@ -1111,11 +1111,6 @@ def group_posts(posts):
     </footer>
 
     <!-- Bootstrap JS -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
 
-    <!-- GoatCounter Analytics -->
-    <script data-goatcounter="https://johanmontesinos.goatcounter.com/count"
-            async src="//gc.zgo.at/count.js"></script>
-
-</body>
-</html>
+    <!-- GoatCounter Anal
